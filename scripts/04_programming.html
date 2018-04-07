@@ -1,0 +1,2755 @@
+﻿﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><script src="//archive.org/includes/analytics.js?v=cf34f82" type="text/javascript"></script>
+<script type="text/javascript">window.addEventListener('DOMContentLoaded',function(){var v=archive_analytics.values;v.service='wb';v.server_name='wwwb-app23.us.archive.org';v.server_ms=241;archive_analytics.send_pageview({});});</script><script type="text/javascript" src="/static/js/wbhack.js?v=1522452177.0" charset="utf-8"></script>
+
+<script type="text/javascript">
+__wbhack.init('https://web.archive.org/web');
+</script>
+<link rel="stylesheet" type="text/css" href="/static/css/banner-styles.css?v=1522452177.0" />
+<link rel="stylesheet" type="text/css" href="/static/css/iconochive.css?v=1522452177.0" />
+
+<!-- End Wayback Rewrite JS Include -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8;"/>
+<title> Programming - DoraDaemon </title>
+<link rel="stylesheet" href="/web/20150625095009cs_/http://cuihaopy.appspot.com/themes/vector-flower/style.css" type="text/css" media="screen"/>
+<link rel="alternate" type="application/rss+xml" title="DoraDaemon RSS Feed" href="https://web.archive.org/web/20150625095009/http://cuihaopy.appspot.com/feed"/>
+<link href="/static/wlwmanifest.xml" type="application/wlwmanifest+xml" rel="wlwmanifest"/>
+<script type="text/javascript" src="/web/20150625095009js_/http://cuihaopy.appspot.com/static/js/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="https://web.archive.org/web/20150625095009js_/http://ajax.googleapis.com/ajax/libs/jquery/1.3/jquery.min.js"></script>
+<script type="text/javascript">
+if (typeof jQuery == 'undefined')
+{
+    document.write(unescape("%3Cscript src='/static/js/jquery-1.3.2.min.js' type='text/javascript'%3E%3C/script%3E"));
+}
+</script>
+
+</head>
+<body>
+<!-- warpper start -->
+<div id="wrapper">
+<!-- header start -->
+<div id="header">
+	<h1><a href="https://web.archive.org/web/20150625095009/http://cuihaopy.appspot.com/" title="DoraDaemon">DoraDaemon</a></h1>
+	<h2>cuihao's blog (powered by <a href="https://web.archive.org/web/20150625095009/http://micolog.xuming.net/">Micolog</a>)</h2>
+	<div id="navigation">
+	    <div>
+	        <div>
+		        <ul>
+			        <li><a href="https://web.archive.org/web/20150625095009/http://cuihaopy.appspot.com/">Home</a></li>
+			        
+		        </ul>
+	        </div>
+	    </div>
+	</div>
+	<div id="rss"><a href="https://web.archive.org/web/20150625095009/http://cuihaopy.appspot.com/feed"><img src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/spacer.gif" width="55" height="36" alt="RSS" title="RSS"/></a></div>
+</div>
+<!-- header end -->
+
+<!-- container start -->
+<div id="container">
+    
+<!-- content start -->
+<div id="content">
+<h2 style=" margin:-20px 0px 20px 53px;">Categorie : Programming</h2>
+
+
+<div class="post">
+	<h2><a href="/web/20150625095009/http://cuihaopy.appspot.com/?p=117001" title="Permanent Link to [NOIP2006] [动态规划] 金明的预算方案（提高组）">[NOIP2006] [动态规划] 金明的预算方案（提高组）</a></h2>
+	<div class="postmetadata">Posted in  <a href="/web/20150625095009/http://cuihaopy.appspot.com/category/programming">Programming</a> </div>
+	<div class="post_date">03/20/11</div>
+	<div class="entry"><p>-v- 话说，虽然NOIP拿了一等奖，但至今还没把联赛题做一遍（普及组还有几个一直没做）。</p>
+<p>最近想补补动态规划、递推之类的，先拿些简单的背包练练。</p>
+<p>&nbsp;</p>
+<p>金明的预算方案（提高组），题目就不贴了。不算难的背包问题，就是在基本的0/1背包上加了一个简单的主/附件依赖。由于依赖关系很简单，每个主件最多被两个附件依赖，动规转移时用几个IF语句找下列情况最优的一个即可：</p>
+<p>1.不选该主件及附件&nbsp; 2.只选主件&nbsp; 3.选主件和第一个附件&nbsp; 4.选主件和第二个附件&nbsp; 5.选主件和两个附件</p>
+<p>&nbsp;</p>
+<p>以下是C++代码。直接用了背包的降维，动规中的那写IF语句为了减少重复运算做了优化，可能有点难看。</p>
+<p>
+<pre class="brush: cpp;fontsize: 100; first-line: 1; ">#include &lt;fstream&gt;
+#include &lt;cstring&gt;
+
+using namespace std;
+
+int main ()
+{
+	ifstream fin("budget.in");
+	ofstream fout("budget.out");
+
+	int N, M;
+	fin &gt;&gt; N &gt;&gt; M;
+	int V[M][3], P[M][3];
+
+	memset(V, 0, sizeof(V));
+	memset(P, 0, sizeof(P));
+	for (int i=0; i&lt;M; i++)
+	{
+		int v, p, q;
+		fin &gt;&gt; v &gt;&gt; p &gt;&gt; q;
+		if (q)
+			if (!V[q-1][1])
+				V[q-1][1] = v,
+				P[q-1][1] = p;
+			else
+				V[q-1][2] = v,
+				P[q-1][2] = p;
+		else
+			V[i][0] = v,
+			P[i][0] = p;
+	}
+
+	int f[N+1];
+	memset(f, 0, sizeof(f));
+	for (int i=0; i&lt;M; i++)
+		if (V[i][0])
+			for (int j=N; j&gt;=V[i][0]; j--)
+			{
+#define T(X) (V[i][X]*P[i][X])
+				int rest = j-V[i][0], sum = T(0);
+
+				if (f[rest] + sum &gt; f[j])
+					f[j] = f[j-V[i][0]] + sum;
+
+				if (rest-V[i][1] &gt;= 0  &amp;&amp;
+						f[rest-V[i][1]] + sum + T(1) &gt; f[j])
+					f[j] = f[rest-V[i][1]] + sum + T(1);
+
+				if ((rest = rest-V[i][2]) &gt;= 0)
+				{
+					if (f[rest] + (sum = sum + T(2)) &gt; f[j])
+						f[j] = f[rest] + sum;
+
+					if ((rest = rest-V[i][1]) &gt;= 0)
+						if (f[rest] + (sum = sum + T(1)) &gt; f[j])
+							f[j] = f[rest] + sum;
+				}
+			}
+
+	int ans = 0;
+	for (int i=1; i&lt;=N; i++)
+		if (f[i] &gt; ans)
+			ans = f[i];
+
+	fout &lt;&lt; ans &lt;&lt; endl;
+
+	fin.close();
+	fout.close();
+
+	return 0;
+}</pre>
+</p></div>
+	
+	<p class="tags">Tags: <a href="/web/20150625095009/http://cuihaopy.appspot.com/tag/C/C%2B%2B">C/C++</a>&nbsp;&nbsp;<a href="/web/20150625095009/http://cuihaopy.appspot.com/tag/%E8%81%94%E8%B5%9B">联赛</a>&nbsp;&nbsp;<a href="/web/20150625095009/http://cuihaopy.appspot.com/tag/NOIP">NOIP</a>&nbsp;&nbsp;<a href="/web/20150625095009/http://cuihaopy.appspot.com/tag/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92">动态规划</a>&nbsp;&nbsp;</p>
+	
+	<div class="endline"></div>
+	<div class="bookmark">
+	    <ul>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://digg.com/submit?phase=2&amp;url=?p=117001&amp;title=[NOIP2006] [动态规划] 金明的预算方案（提高组）"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/digg.png" alt="Digg"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://del.icio.us/post?url=?p=117001&amp;title=[NOIP2006] [动态规划] 金明的预算方案（提高组）"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/delicious.png" alt="Del.icio.us"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://www.stumbleupon.com/submit?url=?p=117001&amp;title=[NOIP2006] [动态规划] 金明的预算方案（提高组）"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/stumbleupon.png" alt="StumbleUpon"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://reddit.com/submit?url=?p=117001&amp;title=[NOIP2006] [动态规划] 金明的预算方案（提高组）"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/reddit.png" alt="Reddit"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://twitter.com/home?status=?p=117001"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/twitter.png" alt="Twitter"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://cuihaopy.appspot.com/feed"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/rss.png" alt="RSS"/></a></li>
+        </ul>
+	</div>
+	<div class="read_comments"><a href="/web/20150625095009/http://cuihaopy.appspot.com/?p=117001#comments">Read User's Comments(0)</a></div>
+</div>
+
+<div class="post">
+	<h2><a href="/web/20150625095009/http://cuihaopy.appspot.com/?p=116001" title="Permanent Link to 牛顿法解方程">牛顿法解方程</a></h2>
+	<div class="postmetadata">Posted in  <a href="/web/20150625095009/http://cuihaopy.appspot.com/category/programming">Programming</a> </div>
+	<div class="post_date">03/18/11</div>
+	<div class="entry"><p>关于牛顿法，参见：<a href="https://web.archive.org/web/20150625095009/http://zh.wikipedia.org/zh/%E7%89%9B%E9%A1%BF%E6%B3%95">喂鸡百科</a></p>
+<p>以下是我的程序。不连续的、定义域不是R的函数不能解。简单的高次方程还是可以对付的。</p>
+<p>
+<pre class="brush: cpp;fontsize: 100; first-line: 1; ">#include &lt;cstdio&gt;
+#include &lt;cmath&gt;
+
+using namespace std;
+
+//示例函数
+long double exfunc (const long double a)
+{
+	return a*a - 100;
+}
+
+//求函数func在x处的导数
+inline long double EQ_Detivative (long double(*func)(const long double),
+		const long double x)
+{
+	long double off = x / 10000.0;
+	return (func(x + off) - func(x - off)) / (2.0 * off);
+}
+
+//解方程
+long double EQ_Solve (long double(*func)(const long double),
+		long double x, const long double off)
+{
+	long double k, y = func(x);
+
+	while (abs(y) &gt; off)
+	{
+		k = EQ_Detivative(func, x);
+		x = x - (y / k);
+		y = func(x);
+	}
+
+	return x;
+}
+
+int main ()
+{
+	//解方程exfunc(x)=0, 搜索起始点x=0.01, 精确度0.001
+	printf("%Lf\n", EQ_Solve(exfunc, 0.01, 0.001));
+
+	return 0;
+}</pre>
+</p></div>
+	
+	<p class="tags">Tags: <a href="/web/20150625095009/http://cuihaopy.appspot.com/tag/%E7%AE%97%E6%B3%95">算法</a>&nbsp;&nbsp;<a href="/web/20150625095009/http://cuihaopy.appspot.com/tag/%E6%95%B0%E5%AD%A6">数学</a>&nbsp;&nbsp;<a href="/web/20150625095009/http://cuihaopy.appspot.com/tag/C/C%2B%2B">C/C++</a>&nbsp;&nbsp;</p>
+	
+	<div class="endline"></div>
+	<div class="bookmark">
+	    <ul>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://digg.com/submit?phase=2&amp;url=?p=116001&amp;title=牛顿法解方程"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/digg.png" alt="Digg"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://del.icio.us/post?url=?p=116001&amp;title=牛顿法解方程"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/delicious.png" alt="Del.icio.us"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://www.stumbleupon.com/submit?url=?p=116001&amp;title=牛顿法解方程"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/stumbleupon.png" alt="StumbleUpon"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://reddit.com/submit?url=?p=116001&amp;title=牛顿法解方程"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/reddit.png" alt="Reddit"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://twitter.com/home?status=?p=116001"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/twitter.png" alt="Twitter"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://cuihaopy.appspot.com/feed"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/rss.png" alt="RSS"/></a></li>
+        </ul>
+	</div>
+	<div class="read_comments"><a href="/web/20150625095009/http://cuihaopy.appspot.com/?p=116001#comments">Read User's Comments(0)</a></div>
+</div>
+
+<div class="post">
+	<h2><a href="/web/20150625095009/http://cuihaopy.appspot.com/?p=114001" title="Permanent Link to [最大流, Edmonds–Karp算法] shuttle 太空飞行计划">[最大流, Edmonds–Karp算法] shuttle 太空飞行计划</a></h2>
+	<div class="postmetadata">Posted in  <a href="/web/20150625095009/http://cuihaopy.appspot.com/category/programming">Programming</a> </div>
+	<div class="post_date">03/05/11</div>
+	<div class="entry"><p><strong>问题描述</strong></p>
+<p>W 教授正在为国家航天中心计划一系列的太空飞行。每次太空飞行可进行一系列商业性实验而获取利润。现已确定了一个可供选择的实验集合 E={E1，E2，&hellip;，Em}，和进行这些实验需要使用的全部仪器的集合I={I1， I2，&hellip;In}。 实验 Ej需要用到的仪器是 I的子集。配置仪器Ik的费用为ck美元。实验Ej的赞助商已同意为该实验结果支付pj美元。W教授的任务是找出一个有效算法， 确定在一次太空飞行中要进行哪些实验并因此而配置哪些仪器才能使太空飞行的净收益最大。这里净收益是指进行实验所获得的全部收入与配置仪器的全部费用的差额。</p>
+<p><strong>数据输入</strong></p>
+<p>由文件input.txt提供输入数据。文件第 1行有 2 个正整数 m和 n。m是实验数，n是仪器数。接下来的 m 行，每行是一个实验的有关数据。第一个数赞助商同意支付该实验的费<br/> 用；接着是该实验需要用到的若干仪器的编号。最后一行的 n个数是配置每个仪器的费用。</p>
+<p><strong>结果输出</strong></p>
+<p>程序运行结束时，将最佳实验方案输出到文件 output.txt 中。第 1 行是实验编号；第 2行是仪器编号；最后一行是净收益。</p>
+<p><strong>样例</strong></p>
+<p>shuttle.in</p>
+<pre class="brush: plain;gutter: false; light: true; fontsize: 100; first-line: 1; ">2 3
+10 1 2
+25 2 3
+5 6 7</pre>
+<p>shuttle.out</p>
+<pre class="brush: bash;gutter: false; light: true; fontsize: 100; first-line: 1; ">1 2
+1 2 3
+17</pre>
+<p>&nbsp;</p>
+<p>《算法导论》上思考题有这个，这类问题的专业说法是&ldquo;最大权闭合图&rdquo;，用网络流解决。</p>
+<p>关键在于如何建立网络流模型，网上有很好的讲解： <a href="https://web.archive.org/web/20150625095009/http://blog.imzzl.com/2010/01/113.html">http://blog.imzzl.com/2010/01/113.html</a></p>
+<p>至于如何求收益最大时进行的实验和需要的器材，搜索残余网络得到最小割，输出源点所在部分的结点就行了。</p>
+<p>我用的Edmonds&ndash;Karp算法（即BFS版本的Ford&ndash;Fulkerson）求最大流，以下是C++代码，练习了STL：</p>
+<p>&nbsp;</p>
+<pre class="brush: cpp;collapse: true; fontsize: 100; first-line: 1; ">#include &lt;iostream&gt;
+#include &lt;fstream&gt;
+#include &lt;cstring&gt;
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+
+using namespace std;
+
+const int INFFLOW = 0x7FFFFFFF;
+
+struct ST_PATH {
+	int c, end;
+};
+
+vector&lt;ST_PATH&gt; *map;
+
+void addpath (const int u, const int v, const int c)
+{	//向邻接表添加容量为c的边(u,v), 以及退流用的反向边(v,u)
+	ST_PATH newp;
+
+	newp.end = v;
+	newp.c = c;
+	map[u].push_back(newp);
+
+	newp.end = u;
+	newp.c = 0;
+	map[v].push_back(newp);
+}
+
+int main (void)
+{
+	ifstream fin("shuttle.in");
+	ofstream fout("shuttle.out");
+
+	//读取数据及初始化
+	int M, N, total=0;
+	fin &gt;&gt; M &gt;&gt; N;
+	map = new vector&lt;ST_PATH&gt; [M+N+2];
+	for (int i=1; i&lt;=M; i++)
+	{
+		int tmp;
+		fin &gt;&gt; tmp;
+		total += tmp;
+		addpath(0, i, tmp);
+
+		while (fin.get() != '\n')
+		{ //Windows会读出错, 可以改成'\t'或者用stringstream什么的
+			fin &gt;&gt; tmp;
+			addpath(i, M+tmp, INFFLOW);
+		}
+	}
+
+#define T (M+N+1)
+	for (int i=M+1; i&lt;=M+N; i++)
+	{
+		int c;
+		fin &gt;&gt; c;
+		addpath(i, T, c);
+	}
+
+	//Edmonds&ndash;Karp算法部分
+	queue&lt;int&gt; q;
+	int pflow[T+1], father[T+1], flow[T+1][T+1], maxflow = 0;
+	memset(flow, 0, sizeof(flow));
+	while (1)
+	{
+		memset(pflow, 0, sizeof(pflow));
+		pflow[0] = INFFLOW;
+		q.push(0);
+
+		while (!q.empty())
+		{
+			int curr = q.front();
+			q.pop();
+			for (vector&lt;ST_PATH&gt;::iterator pi = map[curr].begin();
+					pi &lt; map[curr].end();  pi++)
+			{
+				int fl;
+				if (!pflow[pi-&gt;end]  &amp;&amp;
+						(fl = pi-&gt;c - flow[curr][pi-&gt;end]) &gt; 0)
+				{
+					pflow[pi-&gt;end] = pflow[curr] &gt; fl  ?  fl : pflow[curr];
+					father[pi-&gt;end] = curr;
+					q.push(pi-&gt;end);
+				}
+			}
+		}
+
+		if (!pflow[T])
+			break;
+
+		maxflow += pflow[T];
+		for (int i=T; i; i=father[i])
+			flow[father[i]][i] += pflow[T],
+			flow[i][father[i]] -= pflow[T];
+	}
+	
+	//从残留网络获取最小割包含原点的部分
+	bool boo[M+N+1];
+	memset(boo, 0, sizeof(boo));
+	q.push(0);
+	while (!q.empty())
+	{
+		int curr = q.front();
+		q.pop();
+		for (vector&lt;ST_PATH&gt;::iterator pi = map[curr].begin();
+				pi &lt; map[curr].end();  pi++)
+			if (!boo[pi-&gt;end]  &amp;&amp;  pi-&gt;c - flow[curr][pi-&gt;end] &gt; 0)
+			{
+				boo[pi-&gt;end] = true;
+				q.push(pi-&gt;end);
+			}
+	}
+	
+	//输出部分
+	for (int i=1; i&lt;=M; i++)
+		if (boo[i])
+			fout &lt;&lt; i &lt;&lt; ' ';
+	fout &lt;&lt; endl;
+
+	for (int i=M+1; i&lt;=M+N; i++)
+		if (boo[i])
+			fout &lt;&lt; i-M &lt;&lt; ' ';
+	fout &lt;&lt; endl;
+
+	fout &lt;&lt; total - maxflow &lt;&lt; endl;
+
+	fin.close();
+	fout.close();
+
+	return 0;
+}</pre>
+<p>&nbsp;</p></div>
+	
+	<p class="tags">Tags: <a href="/web/20150625095009/http://cuihaopy.appspot.com/tag/%E7%AE%97%E6%B3%95">算法</a>&nbsp;&nbsp;<a href="/web/20150625095009/http://cuihaopy.appspot.com/tag/%E7%BD%91%E7%BB%9C%E6%B5%81">网络流</a>&nbsp;&nbsp;<a href="/web/20150625095009/http://cuihaopy.appspot.com/tag/C/C%2B%2B">C/C++</a>&nbsp;&nbsp;<a href="/web/20150625095009/http://cuihaopy.appspot.com/tag/STL">STL</a>&nbsp;&nbsp;</p>
+	
+	<div class="endline"></div>
+	<div class="bookmark">
+	    <ul>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://digg.com/submit?phase=2&amp;url=?p=114001&amp;title=[最大流, Edmonds–Karp算法] shuttle 太空飞行计划"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/digg.png" alt="Digg"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://del.icio.us/post?url=?p=114001&amp;title=[最大流, Edmonds–Karp算法] shuttle 太空飞行计划"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/delicious.png" alt="Del.icio.us"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://www.stumbleupon.com/submit?url=?p=114001&amp;title=[最大流, Edmonds–Karp算法] shuttle 太空飞行计划"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/stumbleupon.png" alt="StumbleUpon"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://reddit.com/submit?url=?p=114001&amp;title=[最大流, Edmonds–Karp算法] shuttle 太空飞行计划"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/reddit.png" alt="Reddit"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://twitter.com/home?status=?p=114001"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/twitter.png" alt="Twitter"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://cuihaopy.appspot.com/feed"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/rss.png" alt="RSS"/></a></li>
+        </ul>
+	</div>
+	<div class="read_comments"><a href="/web/20150625095009/http://cuihaopy.appspot.com/?p=114001#comments">Read User's Comments(0)</a></div>
+</div>
+
+<div class="post">
+	<h2><a href="/web/20150625095009/http://cuihaopy.appspot.com/?p=113001" title="Permanent Link to [二分图匹配, 匈牙利算法] pilot 飞行员配对">[二分图匹配, 匈牙利算法] pilot 飞行员配对</a></h2>
+	<div class="postmetadata">Posted in  <a href="/web/20150625095009/http://cuihaopy.appspot.com/category/programming">Programming</a> </div>
+	<div class="post_date">03/05/11</div>
+	<div class="entry"><p>我就不贴题了，参见： <a href="https://web.archive.org/web/20150625095009/http://acm.nankai.edu.cn/p2121.html">http://acm.nankai.edu.cn/p2121.html</a></p>
+<p>不带任何变化的、赤裸裸的二分图匹配问题。通过添加源和汇，可以转换成网络流问题。</p>
+<p>今天学习了更加针对二分图匹配问题的<strong>匈牙利算法</strong>，又写了一遍这道题。</p>
+<p>这个算法，原理不怎么好懂。可以参考：<a href="https://web.archive.org/web/20150625095009/http://baike.baidu.com/view/501092.htm">百度百科</a> <a href="https://web.archive.org/web/20150625095009/http://www.byvoid.com/blog/hungary/">郭嘉宝神牛的博客</a> 和各种网络资源。</p>
+<p>匈牙利算法程序非常好写，背下来也蛮容易的：</p>
+<p>
+<pre class="brush: cpp;collapse: true; fontsize: 100; first-line: 1; ">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#include &lt;stdbool.h&gt;
+
+int map[101][101], mat[101];
+bool b[101];
+
+bool path (const int wh)
+{
+	int i;
+	for (i=1; i&lt;=map[wh][0]; i++)
+#define VT map[wh][i]
+		if (!b[VT])
+		{
+			b[VT] = true;
+			if (mat[VT]==0 || path(mat[VT]))
+			{
+				mat[VT] = wh;
+				mat[wh] = VT;
+				return true;
+			}
+		}
+	return false;
+}
+
+int main (void)
+{
+	FILE *fin = fopen("pilot.in", "r"),
+		 *fout = fopen("pilot.out", "w");
+	int M, N;
+
+	fscanf(fin, "%d%d", &amp;M, &amp;N);
+	while (1)
+	{
+		int a, b;
+		fscanf(fin, "%d%d", &amp;a, &amp;b);
+		if (a==-1)
+			break;
+		map[a][++map[a][0]] = b;
+	}
+
+	//匈牙利算法
+	int i, match=0;
+	for (i=1; i&lt;=M; i++)
+	{
+		memset(b, 0, sizeof(bool)*(M+N));
+		if (path(i))
+			match++;
+	}
+
+	fprintf(fout, "%d\n", match);
+
+	for (i=1; i&lt;=M; i++)
+		if (mat[i])
+			fprintf(fout, "%d %d\n", i, mat[i]);
+
+	fclose(fin);
+	fclose(fout);
+
+	return 0;
+}</pre>
+</p></div>
+	
+	<p class="tags">Tags: <a href="/web/20150625095009/http://cuihaopy.appspot.com/tag/C/C%2B%2B">C/C++</a>&nbsp;&nbsp;<a href="/web/20150625095009/http://cuihaopy.appspot.com/tag/%E7%AE%97%E6%B3%95">算法</a>&nbsp;&nbsp;<a href="/web/20150625095009/http://cuihaopy.appspot.com/tag/%E7%BD%91%E7%BB%9C%E6%B5%81">网络流</a>&nbsp;&nbsp;</p>
+	
+	<div class="endline"></div>
+	<div class="bookmark">
+	    <ul>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://digg.com/submit?phase=2&amp;url=?p=113001&amp;title=[二分图匹配, 匈牙利算法] pilot 飞行员配对"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/digg.png" alt="Digg"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://del.icio.us/post?url=?p=113001&amp;title=[二分图匹配, 匈牙利算法] pilot 飞行员配对"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/delicious.png" alt="Del.icio.us"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://www.stumbleupon.com/submit?url=?p=113001&amp;title=[二分图匹配, 匈牙利算法] pilot 飞行员配对"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/stumbleupon.png" alt="StumbleUpon"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://reddit.com/submit?url=?p=113001&amp;title=[二分图匹配, 匈牙利算法] pilot 飞行员配对"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/reddit.png" alt="Reddit"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://twitter.com/home?status=?p=113001"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/twitter.png" alt="Twitter"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://cuihaopy.appspot.com/feed"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/rss.png" alt="RSS"/></a></li>
+        </ul>
+	</div>
+	<div class="read_comments"><a href="/web/20150625095009/http://cuihaopy.appspot.com/?p=113001#comments">Read User's Comments(0)</a></div>
+</div>
+
+<div class="post">
+	<h2><a href="/web/20150625095009/http://cuihaopy.appspot.com/?p=111001" title="Permanent Link to [NOI2003] [Splay(伸展树)] EDITOR2003 文本编辑器">[NOI2003] [Splay(伸展树)] EDITOR2003 文本编辑器</a></h2>
+	<div class="postmetadata">Posted in  <a href="/web/20150625095009/http://cuihaopy.appspot.com/category/programming">Programming</a> </div>
+	<div class="post_date">03/04/11</div>
+	<div class="entry"><h3>文本编辑器</h3>
+<table border="0" cellspacing="0" cellpadding="4" width="100%">
+<tbody>
+<tr>
+<td>时间限制</td>
+<td>2000 ms</td>
+</tr>
+<tr>
+<td>内存限制</td>
+<td>128 MB</td>
+</tr>
+</tbody>
+</table>
+<div class="MainText">
+<p>【问题描述】</p>
+<p>很久很久以前，DOS3.x的程序员们开始对EDLIN感到厌倦。于是，人们开始纷纷改用自己写的文本编辑器&hellip;&hellip;</p>
+<p>多年之后，出于偶然的机会，小明找到了当时的一个编辑软件。进行了一些简单的测试后，小明惊奇地发现：那个软件每秒能够进行上万次编辑操作（当然， 你不能手工进行这样的测试）！于是，小明废寝忘食地想做一个同样的东西出来。你能帮助他吗？ &nbsp;  为了明确任务目标，小明对&ldquo;文本编辑器&rdquo;做了一个抽象的定义：</p>
+<p>文本：由0个或多个字符构成的序列。这些字符的ASCII码在闭区间[32, 126]内，也就是说，这些字符均为可见字符或空格。</p>
+<p>光标：在一段文本中用于指示位置的标记，可以位于文本的第一个字符之前，文本的最后一个字符之后或文本的某两个相邻字符之间。</p>
+<p>文本编辑器：为一个可以对一段文本和该文本中的一个光标进行如下六条操作的程序。如果这段文本为空，我们就说这个文本编辑器是空的。</p>
+<table style="height: 262px;" border="1" cellspacing="0" cellpadding="7" width="433">
+<tbody>
+<tr valign="top">
+<td width="93">
+<p class="cjk" style="widows: 2; orphans: 2;">操作名称</p>
+</td>
+<td width="82">
+<p class="cjk" style="widows: 2; orphans: 2;">输入文件中的格式</p>
+</td>
+<td width="358">
+<p class="cjk" style="widows: 2; orphans: 2;">功能</p>
+</td>
+</tr>
+<tr valign="top">
+<td width="93">
+<p class="cjk" style="widows: 2; orphans: 2;"><span style="font-family: Arial,sans-serif;"><span lang="en-US">MOVE(k)</span></span></p>
+</td>
+<td width="82">
+<p class="cjk" style="widows: 2; orphans: 2;"><span style="font-family: Arial,sans-serif;"><span lang="en-US">Move 			k</span></span></p>
+</td>
+<td width="358">
+<p class="cjk" style="widows: 2; orphans: 2;">将光标移动到第<span style="font-family: Times New Roman,serif;"><span lang="en-US"><span style="font-family: 宋体,SimSun;"><em>k</em></span></span></span>个字符之后，如果<span style="font-family: Times New Roman,serif;"><span lang="en-US"><span style="font-family: 宋体,SimSun;"><em>k</em></span><span style="font-family: 宋体,SimSun;">=0</span></span></span>，将光标移到文本第一个字符之前</p>
+</td>
+</tr>
+<tr valign="top">
+<td width="93">
+<p class="cjk" style="widows: 2; orphans: 2;"><span style="font-family: Arial,sans-serif;"><span lang="en-US">INSERT(n, 			s)</span></span></p>
+</td>
+<td width="82">
+<p class="cjk" style="margin-bottom: 0.07cm; widows: 2; orphans: 2;"><span style="font-family: Times New Roman,serif;"><span lang="en-US"><span style="font-family: Arial,sans-serif;">Insert 			n</span></span></span></p>
+<p class="cjk" style="widows: 2; orphans: 2;"><span style="font-family: Arial,sans-serif;"><span lang="en-US">S</span></span></p>
+</td>
+<td width="358">
+<p class="cjk" style="widows: 2; orphans: 2;">在光标后插入长度为<span style="font-family: Times New Roman,serif;"><span lang="en-US"><span style="font-family: 宋体,SimSun;"><em>n</em></span></span></span>的字符串<span style="font-family: Times New Roman,serif;"><span lang="en-US"><span style="font-family: 宋体,SimSun;"><em>s</em></span></span></span>，光标位置不变，<span style="font-family: Times New Roman,serif;"><span lang="en-US"><span style="font-family: 宋体,SimSun;"><em>n</em></span><span style="font-family: 宋体,SimSun;"> </span><span style="font-family: Symbol,serif;">&sup3;</span><span style="font-family: 宋体,SimSun;"> 1</span></span></span></p>
+</td>
+</tr>
+<tr valign="top">
+<td width="93">
+<p class="cjk" style="widows: 2; orphans: 2;"><span style="font-family: Arial,sans-serif;"><span lang="en-US">DELETE(n)</span></span></p>
+</td>
+<td width="82">
+<p class="cjk" style="widows: 2; orphans: 2;"><span style="font-family: Arial,sans-serif;"><span lang="en-US">Delete 			n</span></span></p>
+</td>
+<td width="358">
+<p class="cjk" style="widows: 2; orphans: 2;">删除光标后的<span style="font-family: Times New Roman,serif;"><span lang="en-US"><span style="font-family: 宋体,SimSun;"><em>n</em></span></span></span>个字符，光标位置不变，<span style="font-family: Times New Roman,serif;"><span lang="en-US"><span style="font-family: 宋体,SimSun;"><em>n</em></span><span style="font-family: 宋体,SimSun;"> </span><span style="font-family: Symbol,serif;">&sup3;</span><span style="font-family: 宋体,SimSun;"> 1</span></span></span></p>
+</td>
+</tr>
+<tr valign="top">
+<td width="93">
+<p class="cjk" style="widows: 2; orphans: 2;"><span style="font-family: Arial,sans-serif;"><span lang="en-US">GET(n)</span></span></p>
+</td>
+<td width="82">
+<p class="cjk" style="widows: 2; orphans: 2;"><span style="font-family: Arial,sans-serif;"><span lang="en-US">Get 			n</span></span></p>
+</td>
+<td width="358">
+<p class="cjk" style="widows: 2; orphans: 2;">输出光标后的<span style="font-family: Times New Roman,serif;"><span lang="en-US"><span style="font-family: 宋体,SimSun;"><em>n</em></span></span></span>个字符，光标位置不变，<span style="font-family: Times New Roman,serif;"><span lang="en-US"><span style="font-family: 宋体,SimSun;"><em>n</em></span><span style="font-family: 宋体,SimSun;"> </span><span style="font-family: Symbol,serif;">&sup3;</span><span style="font-family: 宋体,SimSun;"> 1</span></span></span></p>
+</td>
+</tr>
+<tr valign="top">
+<td width="93">
+<p class="cjk" style="widows: 2; orphans: 2;"><span style="font-family: Arial,sans-serif;"><span lang="en-US">PREV()</span></span></p>
+</td>
+<td width="82">
+<p class="cjk" style="widows: 2; orphans: 2;"><span style="font-family: Arial,sans-serif;"><span lang="en-US">Prev</span></span></p>
+</td>
+<td width="358">
+<p class="cjk" style="widows: 2; orphans: 2;">光标前移一个字符</p>
+</td>
+</tr>
+<tr valign="top">
+<td width="93">
+<p class="cjk" style="widows: 2; orphans: 2;"><span style="font-family: Arial,sans-serif;"><span lang="en-US">NEXT()</span></span></p>
+</td>
+<td width="82">
+<p class="cjk" style="widows: 2; orphans: 2;"><span style="font-family: Arial,sans-serif;"><span lang="en-US">Next</span></span></p>
+</td>
+<td width="358">
+<p class="cjk" style="widows: 2; orphans: 2;">光标后移一个字符</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>比如从一个空的文本编辑器开始，依次执行操作INSERT(13,  &ldquo;Balanced□tree&rdquo;)，MOVE(2)，DELETE(5)，NEXT()，INSERT(7,  &ldquo;□editor&rdquo;)，MOVE(0)，GET(15)后，会输出&ldquo;Bad□editor□tree&rdquo;，如下表所示：</p>
+<table style="height: 282px;" border="1" cellspacing="0" cellpadding="7" width="484">
+<tbody>
+<tr valign="top">
+<td width="104">
+<p class="cjk" style="widows: 2; orphans: 2;">操作</p>
+</td>
+<td width="208">
+<p class="cjk" style="widows: 2; orphans: 2;">操作前的文本</p>
+</td>
+<td width="220">
+<p class="cjk" style="widows: 2; orphans: 2;">操作后的结果</p>
+</td>
+</tr>
+<tr valign="top">
+<td width="104">
+<p class="cjk" style="widows: 2; orphans: 2;"><span style="font-family: Arial,sans-serif;"><span lang="en-US">INSERT(13, 			&ldquo;Balanced□tree&rdquo;)</span></span></p>
+</td>
+<td width="208">
+<p class="cjk" style="margin-bottom: 0.49cm; widows: 2; orphans: 2;"><span style="font-family: Courier New,monospace;"><span lang="en-US"><strong>|</strong></span></span></p>
+<p class="cjk" style="margin-top: 0.49cm; widows: 2; orphans: 2;">（只有光标，文本为空）</p>
+</td>
+<td width="220">
+<p class="cjk" style="widows: 2; orphans: 2;"><span style="font-family: Times New Roman,serif;"><span lang="en-US"><span style="font-family: Courier New,monospace;"><strong>|</strong></span><span style="font-family: Courier New,monospace;">Balanced□tree</span></span></span></p>
+</td>
+</tr>
+<tr valign="top">
+<td width="104">
+<p class="cjk" style="widows: 2; orphans: 2;"><span style="font-family: Arial,sans-serif;"><span lang="en-US">MOVE(2)</span></span></p>
+</td>
+<td width="208">
+<p class="cjk" style="widows: 2; orphans: 2;"><span style="font-family: Times New Roman,serif;"><span lang="en-US"><span style="font-family: Arial,sans-serif;"><strong>|</strong></span><span style="font-family: Arial,sans-serif;">Balanced□tree</span></span></span></p>
+</td>
+<td width="220">
+<p class="cjk" style="widows: 2; orphans: 2;"><span style="font-family: Times New Roman,serif;"><span lang="en-US"><span style="font-family: Courier New,monospace;">Ba</span><span style="font-family: Courier New,monospace;"><strong>|</strong></span><span style="font-family: Courier New,monospace;">lanced□tree</span></span></span></p>
+</td>
+</tr>
+<tr valign="top">
+<td width="104">
+<p class="cjk" style="widows: 2; orphans: 2;"><span style="font-family: Arial,sans-serif;"><span lang="en-US">DELETE(5)</span></span></p>
+</td>
+<td width="208">
+<p class="cjk" style="widows: 2; orphans: 2;"><span style="font-family: Times New Roman,serif;"><span lang="en-US"><span style="font-family: Arial,sans-serif;">Ba</span><span style="font-family: Arial,sans-serif;"><strong>|</strong></span><span style="font-family: Arial,sans-serif;">lanced□tree</span></span></span></p>
+</td>
+<td width="220">
+<p class="cjk" style="widows: 2; orphans: 2;"><span style="font-family: Times New Roman,serif;"><span lang="en-US"><span style="font-family: Courier New,monospace;">Ba</span><span style="font-family: Courier New,monospace;"><strong>|</strong></span><span style="font-family: Courier New,monospace;">d□tree</span></span></span></p>
+</td>
+</tr>
+<tr valign="top">
+<td width="104">
+<p class="cjk" style="widows: 2; orphans: 2;"><span style="font-family: Arial,sans-serif;"><span lang="en-US">NEXT()</span></span></p>
+</td>
+<td width="208">
+<p class="cjk" style="widows: 2; orphans: 2;"><span style="font-family: Times New Roman,serif;"><span lang="en-US"><span style="font-family: Arial,sans-serif;">Ba</span><span style="font-family: Arial,sans-serif;"><strong>|</strong></span><span style="font-family: Arial,sans-serif;">d□tree</span></span></span></p>
+</td>
+<td width="220">
+<p class="cjk" style="widows: 2; orphans: 2;"><span style="font-family: Times New Roman,serif;"><span lang="en-US"><span style="font-family: Courier New,monospace;">Bad</span><span style="font-family: Courier New,monospace;"><strong>|</strong></span><span style="font-family: Courier New,monospace;">□tree</span></span></span></p>
+</td>
+</tr>
+<tr valign="top">
+<td width="104">
+<p class="cjk" style="widows: 2; orphans: 2;"><span style="font-family: Arial,sans-serif;"><span lang="en-US">INSERT(7, 			&ldquo;□editor&rdquo;)</span></span>，</p>
+</td>
+<td width="208">
+<p class="cjk" style="widows: 2; orphans: 2;"><span style="font-family: Times New Roman,serif;"><span lang="en-US"><span style="font-family: Arial,sans-serif;">Bad</span><span style="font-family: Arial,sans-serif;"><strong>|</strong></span><span style="font-family: Arial,sans-serif;">□tree</span></span></span></p>
+</td>
+<td width="220">
+<p class="cjk" style="widows: 2; orphans: 2;"><span style="font-family: Times New Roman,serif;"><span lang="en-US"><span style="font-family: Arial,sans-serif;">Bad</span><span style="font-family: Arial,sans-serif;"><strong>|</strong></span><span style="font-family: Arial,sans-serif;">□editor□tree</span></span></span></p>
+</td>
+</tr>
+<tr valign="top">
+<td width="104">
+<p class="cjk" style="widows: 2; orphans: 2;"><span style="font-family: Arial,sans-serif;"><span lang="en-US">MOVE(0)</span></span></p>
+</td>
+<td width="208">
+<p class="cjk" style="widows: 2; orphans: 2;"><span style="font-family: Times New Roman,serif;"><span lang="en-US"><span style="font-family: Arial,sans-serif;">Bad</span><span style="font-family: Arial,sans-serif;"><strong>|</strong></span><span style="font-family: Arial,sans-serif;">□editor□tree</span></span></span></p>
+</td>
+<td width="220">
+<p class="cjk" style="widows: 2; orphans: 2;"><span style="font-family: Times New Roman,serif;"><span lang="en-US"><span style="font-family: Arial,sans-serif;"><strong>|</strong></span><span style="font-family: Arial,sans-serif;">Bad□editor□tree</span></span></span></p>
+</td>
+</tr>
+<tr valign="top">
+<td width="104">
+<p class="cjk" style="widows: 2; orphans: 2;"><span style="font-family: Arial,sans-serif;"><span lang="en-US">GET(15)</span></span></p>
+</td>
+<td width="208">
+<p class="cjk" style="widows: 2; orphans: 2;"><span style="font-family: Times New Roman,serif;"><span lang="en-US"><span style="font-family: Arial,sans-serif;"><strong>|</strong></span><span style="font-family: Arial,sans-serif;">Bad□editor□tree</span></span></span></p>
+</td>
+<td width="220">
+<p class="cjk" style="widows: 2; orphans: 2;">输出&ldquo;<span style="font-family: Arial,sans-serif;"><span lang="en-US">Bad□editor□tree&rdquo;</span></span></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>上表中，&ldquo;|&rdquo;表示光标，&ldquo;□&rdquo;表示空格。 &nbsp; 你的任务是：</p>
+<ul>
+<li>建立一个空的文本编辑器。</li>
+<li>从输入文件中读入一些操作指令并执行。</li>
+<li>对所有执行过的GET操作，将指定的内容写入输出文件。</li>
+</ul>
+<p>【输入文件】</p>
+<p>输入文件的第一行是指令条数t，以下是需要执行的t个操作。其中：</p>
+<p>为了使输入文件便于阅读，Insert操作的字符串中可能会插入一些回车符，请忽略掉它们（如果难以理解这句话，可以参考样例）。</p>
+<p>除了回车符之外，输入文件的所有字符的ASCII码都在闭区间[32, 126]内。且行尾没有空格。 &nbsp; 这里我们有如下假定：</p>
+<ul>
+<li>MOVE操作不超过50000个，INSERT和DELETE操作的总个数不超过4000，PREV和NEXT操作的总个数不超过200000。</li>
+<li>所有INSERT插入的字符数之和不超过2M（1M=1024*1024），正确的输出文件长度不超过3M字节。</li>
+<li>DELETE操作和GET操作执行时光标后必然有足够的字符。MOVE、PREV、NEXT操作不会把光标移动到非法位置。</li>
+<li>输入文件没有错误。</li>
+</ul>
+<p>&nbsp; 对C++选手的提示：经测试，对最大的测试数据使用fstream进行输入有可能会比使用stdio慢约1秒，因此建议在可以的情况下使用后者。</p>
+<p>【输出文件】</p>
+<p>输出文件的每行依次对应输入文件中每条GET指令的输出。</p>
+<p>【样例输入】</p>
+<pre><pre class="brush: plain;gutter: false; light: true; fontsize: 100; first-line: 1; ">15
+Insert 26
+abcdefghijklmnop
+qrstuv wxy
+Move 15
+Delete 11
+Move 5
+Insert 1
+^
+Next
+Insert 1
+_
+Next
+Next
+Insert 4
+.\/.
+Get 4
+Prev
+Insert 1
+^
+Move 0
+Get 22</pre>
+</pre>
+<p>【样例输出】</p>
+<pre><pre class="brush: plain;gutter: false; light: true; fontsize: 100; first-line: 1; ">.\/.
+abcde^_^f.\/.ghijklmno</pre>
+</pre>
+</div>
+<h3>题解</h3>
+<p>田神牛推荐用Splay（伸展树，一种排序二叉树）做这道题，于是看了看论文，学习了Splay。</p>
+<p>关于Splay的基本知识，推荐阅读： <strong><a href="https://web.archive.org/web/20150625095009/http://sqybi.com/works/the_magical_splay/the_magical_splay.zip">The Magical Splay</a></strong></p>
+<p>&nbsp;</p>
+<p>针对本题说一些问题：</p>
+<p>1. 本题用的&ldquo;二叉排序树&rdquo;，不需要key域，即排序的关键字，只需要数据域存储字符。如果硬要说key的话，就算是字符的顺序吧。插入时只要插到光标所在节点与其后继节点之间即可，排序二叉树操作不会破坏顺序。</p>
+<p>2. Insert插入字符串操作，尽管可以一个一个字符插入，但把字符串转换为一颗子树插入会更有效率。把字符串转换为树并没有什么要求，我为了省事直接转换成一个链了。</p>
+<p>3. 对于这道题，Splay在Delete操作上比其他平衡树要有优势。把光标所在节点伸展到跟，再把删除部分的下一个节点伸展到根的右子树，则要删除的所有节点就在根的右子树的左子树，直接截断即可（没free内存，这不是正确的编程态度 - -）。</p>
+<p>4. 在文本起始处和末尾处各插入一个占位字符，会使编程方便些。</p>
+<p>5. Get操作时，仿照删除操作，把光标所在节点伸展到跟，再把要获取部分的下一个节点伸展到根的右子树，则要获取的所有节点就在根的右子树的左子树，然后对该子树进行中序遍历输出字符。</p>
+<p>&nbsp;</p>
+<p>以下是我的代码，由于Splay是单独写的，程序代码保留了大量封装残余 ^_^</p>
+<p>最近写的代码都很长，不知道是好是坏&hellip;&hellip;</p>
+<pre class="brush: cpp;collapse: true; fontsize: 100; first-line: 1; ">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;stdbool.h&gt;
+
+typedef struct ST_SP_NODE {
+	int size; //子结点数
+	char ch; //数据域
+	struct ST_SP_NODE *p, *left, *right;
+} SP_node; //伸展树结点, 对于本题, 不需要key域.
+
+typedef struct ST_SPTREE {
+	struct ST_SP_NODE *NIL, *root; //NIL:哨兵 root:根结点
+} SP_tree; //伸展树
+
+FILE *fin, *fout; //全局变量, 输入输出文件
+
+/*
+ * &lt; ISLSON 判断X是否为父节点的左孩子 &gt;
+ * &lt; ISRSON 判断X是否为父节点的右孩子 &gt;
+ */
+#define ISLSON(X) ((X)==(X)-&gt;p-&gt;left)
+#define ISRSON(X) ((X)==(X)-&gt;p-&gt;right)
+
+/* &lt; SP_init 初始化树 &gt; */
+void SP_init (SP_tree *tree)
+{
+	tree-&gt;NIL = malloc(sizeof(SP_tree));
+	tree-&gt;root = tree-&gt;NIL-&gt;p = tree-&gt;NIL;
+	tree-&gt;NIL-&gt;size = 0;
+}
+
+/* &lt; SP_R_rotate 右旋 &gt; */
+void SP_R_rotate (SP_tree *tree, SP_node *node)
+{
+	SP_node *l = node-&gt;left;
+
+	l-&gt;p = node-&gt;p;
+	if (node == tree-&gt;root)
+		tree-&gt;root = l;
+	else if (ISLSON(node))
+		node-&gt;p-&gt;left = l;
+	else
+		node-&gt;p-&gt;right = l;
+
+	node-&gt;p = l;
+	node-&gt;left = l-&gt;right;
+	l-&gt;right-&gt;p = node;
+	l-&gt;right = node;
+
+	l-&gt;size = node-&gt;size;
+	node-&gt;size = node-&gt;left-&gt;size + node-&gt;right-&gt;size + 1;
+}
+
+/* &lt; SP_L_rotate 左旋 &gt; */
+void SP_L_rotate (SP_tree *tree, SP_node *node)
+{
+	SP_node *r = node-&gt;right;
+
+	r-&gt;p = node-&gt;p;
+	if (node == tree-&gt;root)
+		tree-&gt;root = r;
+	else if (ISLSON(node))
+		node-&gt;p-&gt;left = r;
+	else
+		node-&gt;p-&gt;right = r;
+
+	node-&gt;p = r;
+	node-&gt;right = r-&gt;left;
+	r-&gt;left-&gt;p = node;
+	r-&gt;left = node;
+
+	r-&gt;size = node-&gt;size;
+	node-&gt;size = node-&gt;left-&gt;size + node-&gt;right-&gt;size + 1;
+}
+
+/*
+ * &lt; SP_splay 树的伸展 &gt;
+ * 把结点node伸展为其祖先结点dest的子节点.
+ * 如果dest==NIL, 伸展到根.
+ */
+void SP_splay (SP_tree *tree, SP_node *node, SP_node *dest)
+{
+	while (node-&gt;p != dest)
+	{
+		if (node-&gt;p-&gt;p == dest)
+		{
+			if (ISLSON(node))
+				SP_R_rotate(tree, node-&gt;p);
+			else
+				SP_L_rotate(tree, node-&gt;p);
+		}
+		else if (ISLSON(node))
+		{
+			if (ISLSON(node-&gt;p))
+			{
+				SP_R_rotate(tree, node-&gt;p-&gt;p);
+				SP_R_rotate(tree, node-&gt;p);
+			}
+			else
+			{
+				SP_R_rotate(tree, node-&gt;p);
+				SP_L_rotate(tree, node-&gt;p);
+			}
+		}
+		else
+		{
+			if (ISRSON(node-&gt;p))
+			{
+				SP_L_rotate(tree, node-&gt;p-&gt;p);
+				SP_L_rotate(tree, node-&gt;p);
+			}
+			else
+			{
+				SP_L_rotate(tree, node-&gt;p);
+				SP_R_rotate(tree, node-&gt;p);
+			}
+		}
+	}
+}
+
+/* &lt; SP_prevnode 求前驱结点 &gt; */
+SP_node *SP_prevnode (const SP_node *node)
+{
+	SP_node *pi = node-&gt;left;
+	while (pi-&gt;size &amp;&amp; pi-&gt;right-&gt;size)
+		pi = pi-&gt;right;
+
+	return pi;
+}
+
+/* &lt; SP_succnode 求后继结点 &gt; */
+SP_node *SP_succnode (const SP_node *node)
+{
+	SP_node *pi = node-&gt;right;
+	while (pi-&gt;size &amp;&amp; pi-&gt;left-&gt;size)
+		pi = pi-&gt;left;
+
+	return pi;
+}
+
+/*
+ * &lt; SP_inserttree 插入子树 &gt;
+ * 将结点树为l的以node为根的子树插入到curr结点后继处.
+ * 如果curr==NULL, 直接把tree的根设为该子树.
+ */
+void SP_inserttree (SP_tree *tree, SP_node *curr,
+					SP_node *node, const int l)
+{
+	if (!curr)
+	{
+		tree-&gt;root = node;
+		tree-&gt;root-&gt;p = tree-&gt;NIL;
+		return;
+	}
+
+	SP_splay(tree, curr, tree-&gt;NIL);
+	SP_node *pi = tree-&gt;root-&gt;right, *pj = tree-&gt;root;
+
+	tree-&gt;root-&gt;size += l;
+	while (pi-&gt;size)
+	{
+		pj = pi;
+		pi-&gt;size += l;
+		pi = pi-&gt;left;
+	}
+
+	node-&gt;p = pj;
+	if (pj != tree-&gt;root)
+		pj-&gt;left = node;
+	else
+		pj-&gt;right = node;
+}
+
+/*
+ * &lt; SP_freetree 释放子树内存 &gt;
+ * 释放子树node和其所有子结点的内存, 用于删除子树后的内存释放.
+ * 对于本题, 为了提高速度, 并没有递归释放所有废弃内存.
+ */
+void SP_freetree (SP_tree *tree, SP_node *node)
+{
+	if (node == tree-&gt;root)
+		tree-&gt;root = tree-&gt;NIL;
+	else
+	{
+		if (ISLSON(node))
+			node-&gt;p-&gt;left = tree-&gt;NIL;
+		else
+			node-&gt;p-&gt;right = tree-&gt;NIL;
+
+		SP_node *pi;
+		for (pi=node-&gt;p; pi!=tree-&gt;NIL; pi=pi-&gt;p)
+			pi-&gt;size = pi-&gt;left-&gt;size + pi-&gt;right-&gt;size +1;
+	}
+
+	free(node);
+}
+
+/*
+ * &lt; SP_deleteall 删除连续多个结点 &gt;
+ * 删除序号在l和r的序号之间的所有结点.
+ */
+void SP_deleteall (SP_tree *tree, SP_node *l, SP_node *r)
+{
+	SP_splay(tree, l, tree-&gt;NIL);
+	SP_node *pre = SP_prevnode(l);
+
+	SP_splay(tree, r, tree-&gt;NIL);
+	SP_node *suc = SP_succnode(r);
+
+	if (pre != tree-&gt;NIL)
+		SP_splay(tree, pre, tree-&gt;NIL);
+	if (suc != tree-&gt;NIL)
+		SP_splay(tree, suc, pre);
+
+	if (suc != tree-&gt;NIL)
+		SP_freetree(tree, suc-&gt;left);
+	else if (pre != tree-&gt;NIL)
+		SP_freetree(tree, pre-&gt;right);
+	else
+		SP_freetree(tree, tree-&gt;root);
+}
+
+/* &lt; SP_find 查找第k个结点 &gt; */
+SP_node *SP_find (SP_node *node, const int k)
+{
+	if (node-&gt;left-&gt;size + 1 == k)
+		return node;
+	else if (node-&gt;left-&gt;size &gt;= k)
+		return SP_find(node-&gt;left, k);
+	else
+		return SP_find(node-&gt;right, k-(node-&gt;left-&gt;size+1));
+}
+
+/*
+ * &lt; str2spnode 字符串转换成树 &gt;
+ * 将长度为len的字符串按顺序转换为一个树, 并返回根.
+ * 用于题中的Insert插入字符串操作.
+ */
+SP_node *str2spnode (const char *str, const int len, SP_node *NIL)
+{
+	SP_node *root = malloc(sizeof(SP_node)), *pi;
+	int i;
+
+	root-&gt;p = root-&gt;left = root-&gt;right = NIL;
+	root-&gt;size = len;
+	root-&gt;ch = str[0];
+
+	pi = root;
+	for (i=1; i&lt;len; i++)
+	{
+		pi-&gt;right = malloc(sizeof(SP_node));
+		pi-&gt;right-&gt;p = pi;
+		pi = pi-&gt;right;
+
+		pi-&gt;left = pi-&gt;right = NIL;
+		pi-&gt;size = len-i;
+		pi-&gt;ch = str[i];
+	}
+
+	return root;
+}
+
+/*
+ * &lt; TRV_inorder 中序遍历树 &gt;
+ * 输出以node为根的子树的中序遍历.
+ * 用于题中的Get获取字符串操作.
+ */
+void TRV_inorder (const SP_node *node)
+{
+	if (node-&gt;left-&gt;size)
+		TRV_inorder(node-&gt;left);
+
+	fputc(node-&gt;ch, fout);
+
+	if (node-&gt;right-&gt;size)
+		TRV_inorder(node-&gt;right);
+}
+
+int main ()
+{
+	fin = fopen("editor2003.in", "r"),
+	fout = fopen("editor2003.out", "w");
+
+	int T, i;
+	SP_tree text;
+	SP_node *curr;
+
+	fscanf(fin, "%d", &amp;T);
+
+	SP_init(&amp;text);
+	SP_inserttree (&amp;text, NULL, str2spnode("{", 1, text.NIL), 1);
+	curr = text.root;
+	SP_inserttree (&amp;text, text.root, str2spnode("}", 1, text.NIL), 1);
+
+	for (i=0; i&lt;T; i++)
+	{
+		char cmd[50];
+		int arg;
+		fscanf(fin, "%s", cmd);
+
+		switch (cmd[0])
+		{
+			while (fgetc(fin) != '\n') continue;
+
+			case 'M': // Move 移动光标
+			{
+				fscanf(fin, "%d", &amp;arg);
+				curr = SP_find(text.root, arg + 1);
+				SP_splay(&amp;text, curr, text.NIL);
+				break;
+			}
+
+			case 'I': // Insert 插入字符串
+			{
+				fscanf(fin, "%d", &amp;arg);
+				char *arg2 = malloc((arg+1)*sizeof(char)), *pi, c;
+
+				pi = arg2;
+				while (pi!=arg2+arg)
+					if ((c = fgetc(fin)) &gt;= 32)
+						*(pi++) = c;
+
+				SP_inserttree (&amp;text, curr,
+						str2spnode(arg2, arg, text.NIL), arg);
+				break;
+			}
+
+			case 'D': // Delete 删除字符串
+			{
+				fscanf(fin, "%d", &amp;arg);
+				SP_node *pend = SP_find(curr, curr-&gt;left-&gt;size + arg + 1);
+				SP_deleteall(&amp;text, SP_succnode(curr), pend);
+				break;
+			}
+
+			case 'G': // Get 获取字符串
+			{
+				fscanf(fin, "%d", &amp;arg);
+				SP_node *pend = SP_find(text.root, curr-&gt;left-&gt;size + arg + 2);
+				SP_splay(&amp;text, curr, text.NIL);
+				SP_splay(&amp;text, pend, text.root);
+				TRV_inorder(text.root-&gt;right-&gt;left);
+				fputc('\n', fout);
+				break;
+			}
+
+			case 'P': // Prev 光标前移
+			{
+				curr = SP_prevnode(curr);
+				SP_splay(&amp;text, curr, text.NIL);
+				break;
+			}
+
+			case 'N': // Next 光标后移
+			{
+				curr = SP_succnode(curr);
+				SP_splay(&amp;text, curr, text.NIL);
+				break;
+			}
+		}
+	}
+
+	fclose(fin);
+	fclose(fout);
+
+	return 0;
+}</pre>
+<p>&nbsp;<br/> 下面是我写的原版Splay（含有key域的普通排序二叉树）的插入节点代码，供参考：</p>
+<pre class="brush: cpp;collapse: true; fontsize: 100; first-line: 1; ">void SP_insert (SP_tree *tree, const int key)
+{
+	SP_node *pi = tree-&gt;root, *pj = tree-&gt;NIL;
+
+	while (pi != tree-&gt;NIL)
+	{
+		pi-&gt;size++;
+		pj = pi;
+		if (key &gt; pi-&gt;key)
+			pi = pi-&gt;right;
+		else
+			pi = pi-&gt;left;
+	}
+
+	SP_node *newnode = malloc(sizeof(SP_node));
+	newnode-&gt;p = pj;
+	newnode-&gt;left = newnode-&gt;right = tree-&gt;NIL;
+	newnode-&gt;key = key;
+	newnode-&gt;size = 1;
+
+	if (pj == tree-&gt;NIL)
+		tree-&gt;root = newnode;
+	else if (key &gt; pj-&gt;key)
+		pj-&gt;right = newnode;
+	else
+		pj-&gt;left = newnode;
+
+	SP_splay(tree, newnode, tree-&gt;NIL);
+}</pre></div>
+	
+	<p class="tags">Tags: <a href="/web/20150625095009/http://cuihaopy.appspot.com/tag/C/C%2B%2B">C/C++</a>&nbsp;&nbsp;<a href="/web/20150625095009/http://cuihaopy.appspot.com/tag/NOI">NOI</a>&nbsp;&nbsp;<a href="/web/20150625095009/http://cuihaopy.appspot.com/tag/%E7%AE%97%E6%B3%95">算法</a>&nbsp;&nbsp;<a href="/web/20150625095009/http://cuihaopy.appspot.com/tag/%E4%BA%8C%E5%8F%89%E6%A0%91">二叉树</a>&nbsp;&nbsp;</p>
+	
+	<div class="endline"></div>
+	<div class="bookmark">
+	    <ul>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://digg.com/submit?phase=2&amp;url=?p=111001&amp;title=[NOI2003] [Splay(伸展树)] EDITOR2003 文本编辑器"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/digg.png" alt="Digg"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://del.icio.us/post?url=?p=111001&amp;title=[NOI2003] [Splay(伸展树)] EDITOR2003 文本编辑器"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/delicious.png" alt="Del.icio.us"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://www.stumbleupon.com/submit?url=?p=111001&amp;title=[NOI2003] [Splay(伸展树)] EDITOR2003 文本编辑器"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/stumbleupon.png" alt="StumbleUpon"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://reddit.com/submit?url=?p=111001&amp;title=[NOI2003] [Splay(伸展树)] EDITOR2003 文本编辑器"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/reddit.png" alt="Reddit"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://twitter.com/home?status=?p=111001"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/twitter.png" alt="Twitter"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://cuihaopy.appspot.com/feed"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/rss.png" alt="RSS"/></a></li>
+        </ul>
+	</div>
+	<div class="read_comments"><a href="/web/20150625095009/http://cuihaopy.appspot.com/?p=111001#comments">Read User's Comments(0)</a></div>
+</div>
+
+<div class="post">
+	<h2><a href="/web/20150625095009/http://cuihaopy.appspot.com/?p=110001" title="Permanent Link to [二项堆, 并查集] Monkey King 猴子选大王">[二项堆, 并查集] Monkey King 猴子选大王</a></h2>
+	<div class="postmetadata">Posted in  <a href="/web/20150625095009/http://cuihaopy.appspot.com/category/programming">Programming</a> </div>
+	<div class="post_date">02/26/11</div>
+	<div class="entry"><h3><strong>Monkey King 猴子选大王</strong></h3>
+<p>【问题描述】<br/> 在一个森林里,住着N只好斗的猴子.开始,他们各自为政,互不相干.但是猴子们不能消除争吵,但这仅仅发生在两只互不认识的猴子之间.当争吵发生时,争吵的两只猴子都会求助他们各自最强壮的朋友,并且决斗.当然,决斗之后,两只猴子及他们所有的朋友都相互认识了,并且成为朋友,争吵将不会在他们之间发生.<br/> 假定每一只猴子有一个强壮值,在每次决斗之后变为原来的一半(例如,10将为变为5,5将会变为2).<br/> 假定每一只猴子认识他自己. 也就是当他发生争吵,并且自己是他的朋友中最强壮的,他将代表自己进行决斗.<br/> &nbsp;<br/> 【输入格式】<br/> 有几组测试数据,每组测试数据由两部分构成.<br/> 第一部分:第一行有一个整数 N(N&lt;=100,000),表示猴子的数量.下面有N行.每行有一个数,表示猴子的强壮值(&lt;=32768).<br/> 第二部分:第一行有一个整数M(M&lt;=100,000),表示有M次争吵发生.下面有M行,每行有两个整数x和y,表示在第x只猴子和第y只猴子之间发生争吵.<br/> &nbsp;<br/> 【输出格式】<br/> 对于每一次争吵,如果两只猴子认识,输出-1,否则输出一个数,表示决斗后朋友中最强壮猴子的强壮值.</p>
+<p>【输入输出样例】</p>
+<p>monkeyk.in</p>
+<pre class="brush: plain;gutter: false; light: true; fontsize: 100; first-line: 1; ">5
+20
+16
+10
+10
+4
+5
+2 3
+3 4
+3 5
+4 5
+1 5</pre>
+<p>monkeyk.out</p>
+<pre class="brush: plain;gutter: false; light: true; fontsize: 100; first-line: 1; ">8
+5
+5
+-1
+10</pre>
+<p>&nbsp;</p>
+<p>上个学期讲了二项堆，老师把这道题作为练习题。因为写起来比较复杂，一直没写。今天抽空搞定了。</p>
+<p>&nbsp;</p>
+<p>因为要从猴子中不断选取最强壮的猴子，用堆记录体力值比较好。猴子认识后，还要进行堆合并操作，所以选择可合并堆数据结构&mdash;&mdash;二项堆处理这道题比较合适。关于二项堆，参见<a href="https://web.archive.org/web/20150625095009/http://zh.wikipedia.org/zh/%E4%BA%8C%E9%A1%B9%E5%A0%86">维基百科条目</a>或者自己用各种搜索引擎查询，还可以参见《算法导论》相关章节，这部分能看懂的。</p>
+<p>&nbsp;</p>
+<p>对于本题，显然应该用大头堆。减小节点key后的维护是向下移动的，比向上移动要麻烦且费时一些：每次移动从该节点子女中选出key最大的一个，与该节点key交换，一直下移key直到它小于所有子女。</p>
+<p>&nbsp;</p>
+<p>另外，由于要判断每个猴子属于哪一个猴群，或者说所在的二项堆，我还用了并查集作为索引，并用了路径压缩优化。</p>
+<p>&nbsp;</p>
+<p>下面是C语言代码。因为是第一次写二项堆，一些地方实现的不是太好，不过足够过这道题目了（代码太长，默认折叠了）。</p>
+<p>
+<pre class="brush: cpp;collapse: true; fontsize: 100; first-line: 1; ">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+/* 二项堆 */
+struct ST_BH_HEAP;
+struct ST_BH_NODE;
+
+typedef struct ST_BH_NODE {
+	int key, degree; //key:关键字  degree:下一层子女个数
+	struct ST_BH_NODE *p, *son, *bro;
+	//p:父节点  son:最左子节点  bro:右兄弟节点
+} binheap_node; //二项堆节点(二项树)
+
+typedef struct ST_BH_HEAP {
+	struct ST_BH_NODE *head, *max, *tail;
+	//head指向头节点, tail指向尾节点, max指向key最大的节点.
+} binheap; //二项堆
+
+/* 并查集 */
+typedef struct ST_BCJ_NODE {
+	struct ST_BH_HEAP *heap;
+	struct ST_BCJ_NODE *p;
+} bcj_node;
+
+/* 全局变量 */
+binheap_node *mk; //存储二项堆的节点, 不与猴子编号对应
+bcj_node *idx; //并查集的节点, idx[n]是第(n+1)只猴子的并查集元素
+
+/* 
+ * &lt; bh_node_init 二项树节点初始化 &gt;
+ * 初始化二项树node, 关键字设为key.
+ * 返回值是为该节点分配的二项堆.
+ */
+binheap *bh_node_init (binheap_node *node, const int key)
+{
+	node-&gt;degree = 0;
+	node-&gt;key = key;
+	node-&gt;p = node-&gt;son = node-&gt;bro = NULL;
+	binheap *belong = malloc(sizeof(binheap)); //开始时, 为每个二项树节点分配一个新堆
+	belong-&gt;head = node;
+	belong-&gt;max = node;
+	belong-&gt;tail = node;
+
+	return belong;
+}
+
+/* 
+ * &lt; bh_heap_resetmax 维护堆max指针 &gt;
+ * 减小节点关键字后可能破坏二项堆max指针, 通过该操作重新设置max指针.
+ */
+void bh_heap_resetmax (binheap *heap)
+{
+	binheap_node *pi, *pmax = heap-&gt;head;
+	
+	for (pi=pmax-&gt;bro; pi; pi=pi-&gt;bro)
+		if (pi-&gt;key &gt; pmax-&gt;key)
+			pmax = pi;
+
+	heap-&gt;max = pmax;
+}
+
+/* 
+ * &lt; bh_node_dec 减小一个节点的关键字 &gt;
+ * 减小node的关键字到nkey.
+ */
+void bh_node_dec (binheap_node *node, const int nkey)
+{
+	node-&gt;key = nkey;
+	while (node-&gt;son)
+	{
+		binheap_node *pi, *pmax;
+
+		pmax = node-&gt;son;
+		for (pi=node-&gt;son-&gt;bro; pi; pi=pi-&gt;bro)
+			if (pi-&gt;key &gt; pmax-&gt;key)
+				pmax = pi;
+
+		if (node-&gt;key &lt; pmax-&gt;key)
+		{
+			int tmp = node-&gt;key;
+			node-&gt;key = pmax-&gt;key;
+			pmax-&gt;key = tmp;
+			node = pmax;
+		}
+		else
+			break;
+	}
+}
+
+/* 
+ * &lt; bh_heap_linknode 链接二项树与二项堆 &gt;
+ * 把以node为根的二项树链接在binheap的末尾.
+ */
+void bh_heap_linknode (binheap *h, binheap_node *node)
+{
+	if (h-&gt;tail)
+	{
+		h-&gt;tail-&gt;bro = node;
+		node-&gt;bro = NULL;
+		h-&gt;tail = node;
+		if (node-&gt;key &gt; h-&gt;max-&gt;key)
+			h-&gt;max = node;
+	}
+	else
+	{
+		h-&gt;head = h-&gt;tail = h-&gt;max = node;
+		node-&gt;bro = NULL;
+	}
+}
+
+/* 
+ * &lt; bh_node_union 合并二项树 &gt;
+ * 合并二项树na和nb, 返回合并后的新二项树。
+ */
+binheap_node *bh_node_union (binheap_node *na, binheap_node *nb)
+{
+	if (na-&gt;key &lt; nb-&gt;key)
+	{
+		binheap_node *tmp = na;
+		na = nb;
+		nb = tmp;
+	}
+
+	nb-&gt;bro = na-&gt;son;
+	nb-&gt;p = na;
+	na-&gt;son = nb;
+	na-&gt;bro = NULL;
+	na-&gt;degree++;
+
+	return na;
+}
+
+/* 
+ * &lt; bh_heap_deltail 删除二项堆末端的二项树 &gt;
+ * 从二项堆h中删除h-&gt;tail指向的二项树, 并完成指针链接的维护.
+ * 后面合并堆操作用到的, 不是标准的二项堆操作.
+ */
+void bh_heap_deltail (binheap *h)
+{
+	if (h-&gt;tail == h-&gt;head)
+		h-&gt;head = h-&gt;tail = h-&gt;max = NULL;
+	else
+	{
+		binheap_node *pi = h-&gt;head, *pmax = h-&gt;head;
+
+		while (pi-&gt;bro != h-&gt;tail)
+		{
+			pi = pi-&gt;bro;
+			if (pi-&gt;key &gt; pmax-&gt;key)
+				pmax = pi;
+		}
+
+		pi-&gt;bro = NULL;
+		h-&gt;tail = pi;
+		h-&gt;max = pmax;
+	}
+}
+
+/* 
+ * &lt; bh_heap_union 合并二项堆 &gt;
+ * 合并二项堆ha和hb, 并返回合并后的堆.
+ * 自己想的方法, 和一般的实现不太一样, 不如一般的实现好.
+ */
+binheap *bh_heap_union (binheap *ha, binheap *hb)
+{
+	binheap *h = malloc(sizeof(binheap));
+	h-&gt;head = h-&gt;tail = h-&gt;max = NULL;
+
+	binheap_node *pa = ha-&gt;head,
+				 *pb = hb-&gt;head;
+
+	while (pa || pb)
+	{
+		binheap_node *add;
+
+		if (pa &amp;&amp; (!pb || pa-&gt;degree &lt; pb-&gt;degree))
+		{
+			add = pa;
+			pa = pa-&gt;bro;
+		}
+		else if (!pa || pa-&gt;degree &gt; pb-&gt;degree)
+		{
+			add = pb;
+			pb = pb-&gt;bro;
+		}
+		else
+		{
+			binheap_node *nexta = pa-&gt;bro, *nextb = pb-&gt;bro;
+			add = bh_node_union(pa, pb);
+			pa = nexta;
+			pb = nextb;
+		}
+
+		if (!h-&gt;tail  ||  add-&gt;degree != h-&gt;tail-&gt;degree)
+			bh_heap_linknode(h, add);
+		else
+		{
+			add = bh_node_union(add, h-&gt;tail);
+			bh_heap_deltail(h);
+			bh_heap_linknode(h, add);
+		}
+	}
+
+	free(ha);
+	free(hb);
+
+	return h;
+}
+
+/* 
+ * &lt; bcj_node_init 并查集元素初始化 &gt;
+ * 初始化元素node, 单独成一个集合, 指向的二项堆设为heap.
+ */
+void bcj_node_init (bcj_node *node, binheap *heap)
+{
+	node-&gt;p = NULL;
+	node-&gt;heap = heap;
+}
+
+/* 
+ * &lt; bcj_getpa 查找元素最远祖先 &gt;
+ * 递归查找a的最远祖先, 并进行并查集的路径压缩优化.
+ */
+bcj_node *bcj_getpa (bcj_node *a)
+{
+	if (!a-&gt;p)
+		return a;
+	else
+		return (a-&gt;p = bcj_getpa(a-&gt;p));
+}
+
+/* 
+ * &lt; bcj_union 集合合并 &gt;
+ * 合并元素a和b所在的并查集集合.
+ */
+void bcj_union (bcj_node *a, bcj_node *b)
+{
+	bcj_node *fa = bcj_getpa(a),
+			 *fb = bcj_getpa(b);
+	fb-&gt;p = fa;
+}
+
+/* 
+ * &lt; mk_fight 猴子对战 &gt;
+ * 模拟猴子(a+1)和猴子(b+1)的对战, 进行二项堆操作.
+ * 返回题目要求输出的强壮值或者-1.
+ */
+int mk_fight (const int a, const int b)
+{
+	bcj_node *fa = bcj_getpa(idx+a),
+			 *fb = bcj_getpa(idx+b);
+
+	if (fa-&gt;heap == fb-&gt;heap)
+		return -1;
+	else
+	{
+		binheap *ha = fa-&gt;heap,
+		        *hb = fb-&gt;heap;
+
+		bh_node_dec(ha-&gt;max, (ha-&gt;max-&gt;key)&gt;&gt;1);
+		bh_heap_resetmax(ha);
+		bh_node_dec(hb-&gt;max, (hb-&gt;max-&gt;key)&gt;&gt;1);
+		bh_heap_resetmax(hb);
+
+		binheap *newheap = bh_heap_union(ha, hb);
+
+		bcj_union(fa, fb);
+		fa-&gt;heap = newheap;
+
+		return newheap-&gt;max-&gt;key;
+	}
+}
+
+/* 主程序 */
+int main (void)
+{
+	FILE *fin = fopen("monkeyk.in", "r"),
+	     *fout = fopen("monkeyk.out", "w");
+	int n, m, i;
+
+	fscanf(fin, "%d", &amp;n);
+	mk = malloc(n*sizeof(binheap_node));
+	idx = malloc(n*sizeof(bcj_node));
+	for (i=0; i&lt;n; i++)
+	{
+		int str;
+		fscanf(fin, "%d", &amp;str);
+		bcj_node_init(idx+i, bh_node_init(mk+i, str));
+	}
+
+	fscanf(fin, "%d", &amp;m);
+	for (i=0; i&lt;m; i++)
+	{
+		int a, b;
+		fscanf(fin, "%d %d", &amp;a, &amp;b);
+		fprintf(fout, "%d\n", mk_fight(a-1, b-1));
+	}
+
+	fclose(fin);
+	fclose(fout);
+
+	return 0;
+}</pre>
+</p>
+<p>&nbsp;</p></div>
+	
+	<p class="tags">Tags: <a href="/web/20150625095009/http://cuihaopy.appspot.com/tag/%E4%BA%8C%E9%A1%B9%E5%A0%86">二项堆</a>&nbsp;&nbsp;<a href="/web/20150625095009/http://cuihaopy.appspot.com/tag/%E7%AE%97%E6%B3%95">算法</a>&nbsp;&nbsp;<a href="/web/20150625095009/http://cuihaopy.appspot.com/tag/%E5%B9%B6%E6%9F%A5%E9%9B%86">并查集</a>&nbsp;&nbsp;<a href="/web/20150625095009/http://cuihaopy.appspot.com/tag/C/C%2B%2B">C/C++</a>&nbsp;&nbsp;</p>
+	
+	<div class="endline"></div>
+	<div class="bookmark">
+	    <ul>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://digg.com/submit?phase=2&amp;url=?p=110001&amp;title=[二项堆, 并查集] Monkey King 猴子选大王"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/digg.png" alt="Digg"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://del.icio.us/post?url=?p=110001&amp;title=[二项堆, 并查集] Monkey King 猴子选大王"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/delicious.png" alt="Del.icio.us"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://www.stumbleupon.com/submit?url=?p=110001&amp;title=[二项堆, 并查集] Monkey King 猴子选大王"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/stumbleupon.png" alt="StumbleUpon"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://reddit.com/submit?url=?p=110001&amp;title=[二项堆, 并查集] Monkey King 猴子选大王"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/reddit.png" alt="Reddit"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://twitter.com/home?status=?p=110001"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/twitter.png" alt="Twitter"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://cuihaopy.appspot.com/feed"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/rss.png" alt="RSS"/></a></li>
+        </ul>
+	</div>
+	<div class="read_comments"><a href="/web/20150625095009/http://cuihaopy.appspot.com/?p=110001#comments">Read User's Comments(0)</a></div>
+</div>
+
+<div class="post">
+	<h2><a href="/web/20150625095009/http://cuihaopy.appspot.com/?p=109001" title="Permanent Link to 归并排序，也是很快的！">归并排序，也是很快的！</a></h2>
+	<div class="postmetadata">Posted in  <a href="/web/20150625095009/http://cuihaopy.appspot.com/category/programming">Programming</a> </div>
+	<div class="post_date">02/19/11</div>
+	<div class="entry"><p><strong>归并排序</strong>：</p>
+<p>两个已排序数组的<strong>归并</strong>操作：每次从两个数组头部取出最小（或最大）的一个元素，出队，加入新数组末端，直到取完，得到由两个已排序数组元素组成的一个新的已排序数组。</p>
+<p>&nbsp;</p>
+<p>把一个未排序数组不断分割，看成许多单元素组成的数组（可以作为有序的），然后不断归并，最后得到一个排序过的数组。这就是<strong>归并排序</strong>。</p>
+<p>&nbsp;</p>
+<p>O(nlog(n))的时间复杂度，和快排、堆排一样。不过归并排序总是需要额外的空间存储新数组，所以不如快排的。其优点是没有特别糟的情况，最坏时间复杂度还是那么多。  &nbsp;</p>
+<p>&nbsp;</p>
+<p>用C语言写了个递归实现的，gcc 4.5.2，归并排序效率和标准库的qsort()差不多，略快一些（20000000随机数：qsort() 4.06s&nbsp; 归并排序 3.98s），还是相当不错的排序算法。感觉递归可以消去，可能再快一些。  &nbsp;</p>
+<p>&nbsp;</p>
+<pre class="brush: cpp;fontsize: 100; first-line: 1; ">void MergeSort (int *a, const int len)
+{
+	if (len &gt; 2)
+	{
+		MergeSort (a, len/2);
+		MergeSort (a+len/2, len-len/2);
+
+		int *buf = malloc( len * sizeof(int) );
+		int i, *p1 = a, *p2 = a+len/2;
+		for (i=0;  i&lt;len-1 &amp;&amp; p1!=a+len/2 &amp;&amp; p2!=a+len;  i++)
+			if (*p1 &lt; *p2)
+				buf[i] = *p1++;
+			else
+				buf[i] = *p2++;
+
+		if (p1 != a+len/2)
+			memcpy(buf+i, p1, (len-i)*sizeof(int));
+		else if (p2 != a+len)
+			memcpy(buf+i, p2, (len-i)*sizeof(int));
+
+		memcpy(a, buf, len*sizeof(int));
+		free(buf);
+	}
+	else if (len == 2 &amp;&amp; a[0] &gt; a[1])
+	{
+		int temp = a[0];
+		a[0] = a[1];
+		a[1] = temp;
+	}
+}</pre></div>
+	
+	<p class="tags">Tags: <a href="/web/20150625095009/http://cuihaopy.appspot.com/tag/%E7%AE%97%E6%B3%95">算法</a>&nbsp;&nbsp;<a href="/web/20150625095009/http://cuihaopy.appspot.com/tag/%E6%8E%92%E5%BA%8F">排序</a>&nbsp;&nbsp;<a href="/web/20150625095009/http://cuihaopy.appspot.com/tag/C/C%2B%2B">C/C++</a>&nbsp;&nbsp;</p>
+	
+	<div class="endline"></div>
+	<div class="bookmark">
+	    <ul>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://digg.com/submit?phase=2&amp;url=?p=109001&amp;title=归并排序，也是很快的！"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/digg.png" alt="Digg"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://del.icio.us/post?url=?p=109001&amp;title=归并排序，也是很快的！"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/delicious.png" alt="Del.icio.us"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://www.stumbleupon.com/submit?url=?p=109001&amp;title=归并排序，也是很快的！"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/stumbleupon.png" alt="StumbleUpon"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://reddit.com/submit?url=?p=109001&amp;title=归并排序，也是很快的！"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/reddit.png" alt="Reddit"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://twitter.com/home?status=?p=109001"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/twitter.png" alt="Twitter"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://cuihaopy.appspot.com/feed"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/rss.png" alt="RSS"/></a></li>
+        </ul>
+	</div>
+	<div class="read_comments"><a href="/web/20150625095009/http://cuihaopy.appspot.com/?p=109001#comments">Read User's Comments(0)</a></div>
+</div>
+
+<div class="post">
+	<h2><a href="/web/20150625095009/http://cuihaopy.appspot.com/?p=108001" title="Permanent Link to 另一个冒泡排序优化——鸡尾酒排序">另一个冒泡排序优化——鸡尾酒排序</a></h2>
+	<div class="postmetadata">Posted in  <a href="/web/20150625095009/http://cuihaopy.appspot.com/category/programming">Programming</a> </div>
+	<div class="post_date">02/16/11</div>
+	<div class="entry"><blockquote>
+<p>From: <a href="https://web.archive.org/web/20150625095009/http://zh.wikipedia.org/wiki/%E9%B8%A1%E5%B0%BE%E9%85%92%E6%8E%92%E5%BA%8F">[Wikipedia 鸡尾酒排序]</a> :</p>
+<p><strong>鸡尾酒排序</strong>，也就是<strong>定向冒泡排序</strong>, <strong>鸡尾酒搅拌排序</strong>, <strong>搅拌排序</strong> (也可以视作<a class="mw-redirect" title="选择排序" href="https://web.archive.org/web/20150625095009/http://zh.wikipedia.org/wiki/%E9%81%B8%E6%93%87%E6%8E%92%E5%BA%8F">选择排序</a>的一种变形), <strong>涟漪排序</strong>, <strong>来回排序</strong> or <strong>快乐小时排序</strong>, 是<a href="https://web.archive.org/web/20150625095009/http://zh.wikipedia.org/wiki/%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F">冒泡排序</a>的一种变形。此算法与<a href="https://web.archive.org/web/20150625095009/http://zh.wikipedia.org/wiki/%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F">冒泡排序</a>的不同处在于排序时是以双向在序列中进行排序。</p>
+</blockquote>
+<p>&nbsp;</p>
+<p>原理类似冒泡排序。一次循环中，先从前往后把大数冒上去，再从后往前把小数冒回来。比起基本的冒泡排序，从两端缩小未排序范围更有效率。</p>
+<p>&nbsp;</p>
+<p>排序50000个随机数，与上次写的冒泡排序的比较：冒泡排序---5.79s&nbsp;&nbsp;&nbsp; 鸡尾酒排序---4.05s</p>
+<p>&nbsp;</p>
+<p>以下是Pascal代码，和上次写的冒泡排序用一样的优化。为了简洁，只给出排序函数，swaplnt是交换变量函数，省略了。用法：cocktailsort (长整形数组, 待排序区域下界, 上界)。</p>
+<p>&nbsp;</p>
+<pre class="brush: delphi;fontsize: 100; first-line: 1; ">procedure cocktailsort (var a: array of longint;  down, up: longint);
+	var
+		j, lastswp: longint;
+		swapped: boolean;
+	begin
+		repeat
+			swapped := false;
+
+			lastswp := 0;
+			for j := down to up-1 do
+				if a[j] &gt; a[j+1] then
+				begin
+					swaplint(a[j], a[j+1]);
+					lastswp := j;
+				end;
+
+			if lastswp &lt;&gt; 0 then
+			begin
+				up := lastswp;
+				swapped := true;
+			end;
+
+			lastswp := 0;
+			for j := up downto down+1 do
+				if a[j] &lt; a[j-1] then
+				begin
+					swaplint(a[j], a[j-1]);
+					lastswp := j;
+				end;
+
+			if lastswp &lt;&gt; 0 then
+			begin
+				down := lastswp;
+				swapped := true;
+			end;
+		until not(swapped);
+	end;</pre>
+<p>&nbsp;</p>
+<p>&nbsp;</p></div>
+	
+	<p class="tags">Tags: <a href="/web/20150625095009/http://cuihaopy.appspot.com/tag/Pascal">Pascal</a>&nbsp;&nbsp;<a href="/web/20150625095009/http://cuihaopy.appspot.com/tag/%E7%AE%97%E6%B3%95">算法</a>&nbsp;&nbsp;</p>
+	
+	<div class="endline"></div>
+	<div class="bookmark">
+	    <ul>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://digg.com/submit?phase=2&amp;url=?p=108001&amp;title=另一个冒泡排序优化——鸡尾酒排序"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/digg.png" alt="Digg"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://del.icio.us/post?url=?p=108001&amp;title=另一个冒泡排序优化——鸡尾酒排序"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/delicious.png" alt="Del.icio.us"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://www.stumbleupon.com/submit?url=?p=108001&amp;title=另一个冒泡排序优化——鸡尾酒排序"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/stumbleupon.png" alt="StumbleUpon"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://reddit.com/submit?url=?p=108001&amp;title=另一个冒泡排序优化——鸡尾酒排序"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/reddit.png" alt="Reddit"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://twitter.com/home?status=?p=108001"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/twitter.png" alt="Twitter"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://cuihaopy.appspot.com/feed"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/rss.png" alt="RSS"/></a></li>
+        </ul>
+	</div>
+	<div class="read_comments"><a href="/web/20150625095009/http://cuihaopy.appspot.com/?p=108001#comments">Read User's Comments(0)</a></div>
+</div>
+
+<div class="post">
+	<h2><a href="/web/20150625095009/http://cuihaopy.appspot.com/?p=107001" title="Permanent Link to 优化的快速排序">优化的快速排序</a></h2>
+	<div class="postmetadata">Posted in  <a href="/web/20150625095009/http://cuihaopy.appspot.com/category/programming">Programming</a> </div>
+	<div class="post_date">02/15/11</div>
+	<div class="entry"><p>按照书上的最优快速排序代码，写了两份简单的。驱动程序读取数据规模n，随机数填充一个长度为n的数组，从小到大排序，并输出排序时间。</p>
+<p>@ Athlon 64 X2 5200+ 2.75GHz&nbsp;&nbsp;&nbsp; /&nbsp;&nbsp;&nbsp; 2x2GB DDR2 800</p>
+<p>@ Archlinux ---- 2.6.37-pf x86-64 内核</p>
+<p>GCC 4.5.2：gcc source.c -O3 -std=c99</p>
+<p>FPC 2.4.2：fpc source.pas -O3  &nbsp;</p>
+<p>&nbsp;</p>
+<p>C99实现（修改COMP改变排序顺序； 用标准库qsort比较时间）：</p>
+<pre class="brush: cpp;fontsize: 100; first-line: 1; ">#include &lt;stdio.h&gt;
+#include &lt;stdbool.h&gt;
+#include &lt;stddef.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;sys/time.h&gt;
+
+// 调试开关
+//#define DEBUGPRINT
+
+/* 交换变量的宏函数 */
+#define SWAP(X,Y) {temp=(X);(X)=(Y);(Y)=temp;}
+/* 获取时间差的宏函数 */
+#define TIMEDIFF(X,Y) (1000000*((Y).tv_sec-(X).tv_sec)+(Y).tv_usec-(X).tv_usec)
+
+/* 用于自编快排的比较函数 */
+extern inline int COMP (const int x, const int y)
+{
+	return x &gt; y ? 1 :
+			(x &lt; y ? -1 : 0);
+}
+
+/* 用于标准qsort()的比较函数 */
+int COMP2 (const void *x, const void *y)
+{
+	return *(int*)x - *(int*)y;
+}
+
+/* 自编快排 --- 快速排序部分 */
+void xquicksort (int *pL, int *pR)
+{
+	ptrdiff_t diff;
+	int mid, temp, *pi, *pj, *pmid, ppivot;
+
+	while (( diff = pR - pL ) &gt;= 36 )
+	//36可修改为大于3的任何数
+	//越大快排作用越小，同时插排作用越大
+	{
+		mid = rand() % (diff-2) + 1;
+		pmid = pL + mid;
+
+		if (COMP(*pL, *pmid)&gt;0)
+			SWAP(*pL, *pmid);
+		if (COMP(*pL, *pR)&gt;0)
+			SWAP(*pL, *pR);
+		if (COMP(*pmid, *pR)&gt;0)
+			SWAP(*pmid, *pR);
+
+		SWAP(*pmid, *(pR-1));
+
+		pi = pL;
+		pj = pR - 1;
+		ppivot = *pj;
+		while (1)
+		{
+			while (COMP(*++pi, ppivot) &lt; 0)
+				continue;
+			while (COMP(*--pj, ppivot) &gt; 0)
+				continue;
+
+			if (pi&gt;=pj)
+				break;
+			else
+				SWAP(*pi, *pj);
+		}
+
+		*(pR - 1) = *pi;
+		*pi = ppivot;
+
+		if (pi - pL &gt; pR - pi)
+		{
+			xquicksort(pi+1, pR);
+			pR = pi - 1;
+		}
+		else
+		{
+			xquicksort(pL, pi-1);
+			pL = pi + 1;
+		}
+	}
+}
+
+/* 自编快排 --- 插入排序部分 */
+void InsSort (int *arr, const int len)
+{
+	int i, j, temp;
+	for (i = 1;  i &lt; len;  i++)
+	{
+		temp = arr[i];
+		for (j = i - 1;  j &gt;= 0;  j--)
+			if (COMP(arr[j], temp) &gt; 0)
+				arr[j+1] = arr[j];
+			else
+				break;
+
+		arr[j+1] = temp;
+	}
+}
+
+/* 自编快排 --- 用户接口部分 */
+void QSort (int *arr, const int len)
+{
+	xquicksort(arr, arr+len-1);
+	InsSort(arr, len);
+}
+
+int main (void)
+{
+	int n, *arr, *arr2, i;
+	struct timeval stime, etime;
+
+	printf("数据规模: ");
+	scanf("%d", &amp;n);
+
+	arr = malloc(n * sizeof(int));
+	arr2 = malloc(n * sizeof(int));
+	srand((int)arr);
+
+	puts("数组填充中...");
+	for (i = 0;  i &lt; n;  i++)
+	{
+		arr2[i] = arr[i] = rand();
+#ifdef DEBUGPRINT
+		printf("%d ", arr[i]);
+#endif
+	}
+
+	puts("\n开始使用自编函数排序...");
+	gettimeofday(&amp;stime, NULL);
+	QSort(arr, n);
+	gettimeofday(&amp;etime, NULL);
+	printf("排序用时: %.3f ms\n", (float)TIMEDIFF(stime, etime) / 1000.0);
+
+	puts("\n开始使用标准库函数排序...");
+	gettimeofday(&amp;stime, NULL);
+	qsort(arr2, n, sizeof(int), COMP2);
+	gettimeofday(&amp;etime, NULL);
+	printf("排序用时: %.3f ms\n", (float)TIMEDIFF(stime, etime) / 1000.0);
+
+#ifdef DEBUGPRINT
+	bool wrong = false;
+	puts("排序后数组:");
+	for (i = 0;  i &lt; n-1;  i++)
+	{
+		if (arr[i] != arr2[i])
+			wrong = true;
+		printf("%d ", arr[i]);
+	}
+	puts(wrong ? "\n算法错误" : "\n正常结束");
+#endif
+
+	return 0;
+}</pre>
+<p>&nbsp;  Pascal实现（修改所有comp注释行，反转不等号，即可调整排序顺序； 用FP示例快排比对时间）：</p>
+<pre class="brush: delphi;fontsize: 100; first-line: 1; ">program QuickSort_im;
+
+uses
+	dos;
+
+var
+	n, i, stime, etime : longint;
+	wrong : boolean;
+	arr, arr2 : array of longint;
+
+(*
+ * &lt; gettimeofday_hs: 获取时间 &gt;
+ * 返回值: 以0.01秒为单位的当日时间
+ * 本程序中用于统计排序用时。
+ *)
+function gettimeofday_hs : longint;
+	var
+		hour, minute, second, sec100 : word;
+	begin
+		gettime(hour, minute, second, sec100);
+		exit( hour*360000 + minute*6000 + second*100 + sec100 );
+	end;
+
+// ------------ 快速排序所需函数 BEGIN ------------ //
+(*
+ * &lt; swap: 交换变量 &gt;
+ * swap (变量a, 变量b)
+ *)
+procedure swap (var a, b: longint);
+	var
+		temp: longint;
+	begin
+		temp := a;
+		a := b;
+		b := temp;
+	end;
+
+(*
+ * &lt; inssort: 插入排序 &gt;
+ * inssort (待排序数组, 排序区域下界, 排序区域上界)
+ * 本程序中用于快排后期处理。
+ *)
+procedure inssort (var a: array of longint; const down, up: longint);
+	var
+		i, j, add, temp : longint;
+	begin
+		for i := down+1 to up do
+		begin
+			temp := a[i];
+
+			add := down;
+			for j := i-1 downto down do
+				if a[j] &gt; temp then //COMP
+					arr[j+1] := arr[j]
+				else
+				begin
+					add := j+1;
+					break;
+				end;
+
+			arr[add] := temp;
+		end;
+	end; // inssort END
+
+(*
+ * &lt; qsort: 自己写的快速排序 &gt;
+ * qsort (待排序数组, 排序区域下界, 排序区域上界)
+ * 按照书上的方法，优化过的快排，从C代码移植。
+ *)
+procedure qsort (var a: array of longint;  const down, up: longint);
+
+	procedure xquicksort (l, r: longint);
+		var
+			diff, i, j, pivot: longint;
+		begin
+			diff := r - l;
+
+			while diff &gt;= 24 do
+			//24可修改为大于3的任何数
+			//越大快排作用越小，同时插排作用越大
+			begin
+				i := random(diff-2) + 1 + l;
+				if a[l] &gt; a[i] then //COMP
+					swap(a[l], a[i]);
+				if a[l] &gt; a[r] then //COMP
+					swap(a[l], a[r]);
+				if a[i] &gt; a[r] then //COMP
+					swap(a[i], a[r]);
+				swap(a[i], a[r-1]);
+
+				i := l;
+				j := r-1;
+				pivot := a[j];
+				repeat
+					repeat inc(i); until a[i] &gt;= pivot; //COMP
+					repeat dec(j); until a[j] &lt;= pivot; //COMP
+
+					if i&gt;=j then
+						break
+					else
+						swap(a[i], a[j]);
+				until false;
+
+				a[r-1] := a[i];
+				a[i] := pivot;
+
+				if i-l &gt; r-i then
+				begin
+					xquicksort(i+1, r);
+					r := i-1;
+				end
+				else
+				begin
+					xquicksort(l, i-1);
+					l := i + 1;
+				end;
+
+				diff := r - l;
+			end;
+		end; // qsort-&gt;xquicksort END
+
+	begin
+		xquicksort(down, up);
+		inssort(arr, down, up);
+	end; // qsort END
+
+(*
+ * &lt; qsort_fp: FreePascal 快速排序示例 &gt;
+ * qsort_fp (待排序数组, 排序区域下界, 排序区域上界)
+ * FP安装路径/demo/text/qsort.pp 快速排序示例。
+ *)
+
+procedure qsort_fp (var a: array of longint;  const down, up: longint);
+	procedure sort(l,r: longint);
+		var
+			i,j,x,y: longint;
+		begin
+			i:=l;
+			j:=r;
+			x:=a[(l+r) div 2];
+
+			repeat
+				while a[i]&lt;x do inc(i);
+				while x&lt;a[j] do dec(j);
+
+          			if i&lt;=j then
+				begin
+					y:=a[i];
+					a[i]:=a[j];
+					a[j]:=y;
+					inc(i);
+					dec(j);
+				end;
+			until i&gt;j;
+
+			if l&lt;j then sort(l,j);
+			if i&lt;r then sort(i,r);
+		end; // qsort_fp-&gt;sort END
+
+	begin
+		sort(down, up);
+	end; // qsort_fp END
+
+// ------------ 快速排序所需函数 END ------------ //
+
+begin
+	write('数据规模: ');
+	readln(n);	
+
+	randomize;
+	setlength(arr, n);
+	setlength(arr2, n);
+	writeln('数组填充中...');
+	writeln;
+	for i := 0 to n-1 do
+	begin
+		arr[i] := random(maxlongint);
+		arr2[i] := arr[i];
+	end;
+
+	writeln('开始使用自编函数排序...');
+	stime := gettimeofday_hs();
+	qsort(arr, 0, n-1);
+	etime := gettimeofday_hs();
+	writeln('排序用时: ', (etime-stime)/100.0 :0:2, ' s');
+
+	writeln;
+	writeln('开始使用FreePascal示例函数排序...');
+	stime := gettimeofday_hs();
+	qsort_fp(arr2, 0, n-1);
+	etime := gettimeofday_hs();
+	writeln('排序用时: ', (etime-stime)/100.0 :0:2, ' s');
+
+	// 检查排序结果
+	wrong := false;
+	for i := 0 to n-1 do
+		if arr[i] &lt;&gt; arr2[i] then
+			wrong := true;
+
+	writeln;
+	if wrong then
+		writeln('算法错误.')
+	else
+		writeln('正常结束.');
+	// 检查 END
+end.</pre>
+<p>排序20000000个数的性能比较：  C 实现：2.08 s  C qsort()：4.03 s  Pascal 实现：3.36 s  Pascal 示例：4.18 s</p></div>
+	
+	<p class="tags">Tags: <a href="/web/20150625095009/http://cuihaopy.appspot.com/tag/Pascal">Pascal</a>&nbsp;&nbsp;<a href="/web/20150625095009/http://cuihaopy.appspot.com/tag/C/C%2B%2B">C/C++</a>&nbsp;&nbsp;<a href="/web/20150625095009/http://cuihaopy.appspot.com/tag/%E7%AE%97%E6%B3%95">算法</a>&nbsp;&nbsp;</p>
+	
+	<div class="endline"></div>
+	<div class="bookmark">
+	    <ul>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://digg.com/submit?phase=2&amp;url=?p=107001&amp;title=优化的快速排序"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/digg.png" alt="Digg"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://del.icio.us/post?url=?p=107001&amp;title=优化的快速排序"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/delicious.png" alt="Del.icio.us"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://www.stumbleupon.com/submit?url=?p=107001&amp;title=优化的快速排序"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/stumbleupon.png" alt="StumbleUpon"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://reddit.com/submit?url=?p=107001&amp;title=优化的快速排序"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/reddit.png" alt="Reddit"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://twitter.com/home?status=?p=107001"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/twitter.png" alt="Twitter"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://cuihaopy.appspot.com/feed"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/rss.png" alt="RSS"/></a></li>
+        </ul>
+	</div>
+	<div class="read_comments"><a href="/web/20150625095009/http://cuihaopy.appspot.com/?p=107001#comments">Read User's Comments(0)</a></div>
+</div>
+
+<div class="post">
+	<h2><a href="/web/20150625095009/http://cuihaopy.appspot.com/?p=105001" title="Permanent Link to 优化的冒泡排序">优化的冒泡排序</a></h2>
+	<div class="postmetadata">Posted in  <a href="/web/20150625095009/http://cuihaopy.appspot.com/category/programming">Programming</a> </div>
+	<div class="post_date">02/07/11</div>
+	<div class="entry"><p>补寒假作业时突然想到的冒泡排序优化：</p>
+<p>用一个变量mark标记未排序部分与已排序部分的界限（就是最后一次交换的位置，剩下的未交换部分一定是已排序的），下次循环到这个界限停止即可，直到界限更新到边界。</p>
+<p>小优化，估计能想到的人也不少。还是 O(n^2-n) 的冒泡，最优情况降到 O(n)，最差情况依旧，平均起来还是会比原来的快一些。</p>
+<p>以下是Pascal代码，供参考（C/C++有qsort()，用Python写冒泡实在不舒服，还是用Pascal得了）：</p>
+<pre class="brush: pascal;fontsize: 100; first-line: 1; ">
+program bubbleplus (input, output);
+//略优化的冒泡排序 by cuihao
+
+const
+    MAXN = 65535;
+
+var
+    n, mark, newmark, temp, i, j: word;
+    a: array [1 .. MAXN] of word;
+
+begin
+    write('数据规模: ');
+    readln(n);
+
+    writeln('未排序数组:');
+    randomize;
+    for i := 1 to n do
+    begin   //随机数填充数组
+        a[i] := random(MAXN);
+        write(a[i]:6);
+    end;
+
+    writeln;
+    write('开始排序... ');
+
+    // 排序部分begin
+    // 从小到大排序，从数组头向尾端冒泡
+    mark := n;  //标记未排序部分末端
+    repeat
+        newmark := 0;
+        for j := 1 to mark-1 do
+            if a[j] &gt; a[j+1] then
+            begin
+                temp := a[j];
+                a[j] := a[j+1];
+                a[j+1] := temp;
+                newmark := j;
+            end;
+        mark := newmark;    //更新标记
+    until mark = 0;
+    // 排序部分 end
+
+    writeln('排序完毕!');
+    writeln('排序后数组:');
+    mark := 0;
+    for i := 1 to n-1 do
+    begin   // 输出并检测算法正确性
+        if a[i] &gt; a[i+1] then
+            mark := 1;
+        write(a[i]:6);
+    end;
+    writeln(a[n]:6);
+
+    if mark = 1 then
+        writeln('算法错误')
+    else
+        writeln('正常结束.')
+end.
+</pre>
+<p>&nbsp;</p>
+</div>
+	
+	<p class="tags">Tags: <a href="/web/20150625095009/http://cuihaopy.appspot.com/tag/%E7%AE%97%E6%B3%95">算法</a>&nbsp;&nbsp;<a href="/web/20150625095009/http://cuihaopy.appspot.com/tag/Pascal">Pascal</a>&nbsp;&nbsp;<a href="/web/20150625095009/http://cuihaopy.appspot.com/tag/%E6%8E%92%E5%BA%8F">排序</a>&nbsp;&nbsp;</p>
+	
+	<div class="endline"></div>
+	<div class="bookmark">
+	    <ul>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://digg.com/submit?phase=2&amp;url=?p=105001&amp;title=优化的冒泡排序"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/digg.png" alt="Digg"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://del.icio.us/post?url=?p=105001&amp;title=优化的冒泡排序"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/delicious.png" alt="Del.icio.us"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://www.stumbleupon.com/submit?url=?p=105001&amp;title=优化的冒泡排序"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/stumbleupon.png" alt="StumbleUpon"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://reddit.com/submit?url=?p=105001&amp;title=优化的冒泡排序"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/reddit.png" alt="Reddit"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://twitter.com/home?status=?p=105001"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/twitter.png" alt="Twitter"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://cuihaopy.appspot.com/feed"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/rss.png" alt="RSS"/></a></li>
+        </ul>
+	</div>
+	<div class="read_comments"><a href="/web/20150625095009/http://cuihaopy.appspot.com/?p=105001#comments">Read User's Comments(0)</a></div>
+</div>
+
+<div class="post">
+	<h2><a href="/web/20150625095009/http://cuihaopy.appspot.com/?p=93002" title="Permanent Link to 新的Python评测脚本前瞻">新的Python评测脚本前瞻</a></h2>
+	<div class="postmetadata">Posted in  <a href="/web/20150625095009/http://cuihaopy.appspot.com/category/programming">Programming</a> </div>
+	<div class="post_date">01/31/11</div>
+	<div class="entry"><p>感觉上一个评测脚本太没挑战性了，重写了一个，用到了类、异常、子进程管理、通配符、正则表达式、INI文件&hellip;&hellip; 一大堆东西。</p>
+<p>目前主要功能基本写完了，先show：</p>
+<p>这是我测试用的评测配置文件：</p>
+<p>
+<pre class="brush: plain;light: true; fontsize: 100; first-line: 1; ">[problem]
+Name = 测试题目 for test
+Info = 测试题目测试测试测试！Hello World
+
+[source]
+Custom = [.py: python2 %S] [.cx: cp %S %E.cpp, g++ %E.cpp -O3 -o %E.exe, %E.exe] [.rb: ruby %S] 
+FileName = pet.cpp $$ pet.pas $$ pet.c $$ pet.py $$ pet.cx
+Dir = ./src/pet
+
+[data]
+InFile = [./data/pet/*.in1, ./data/pet/*.in2]
+OutFile = [./data/pet/*.ans]
+
+[execute]
+TimeLimit = 1
+MemoryLimitInKB = 800
+Input = $$STD$$, pet.in
+Output = $$STD$$
+
+[report]
+CompareMethod = 
+CompareFunction = IgnoreEmptyLine
+; CountFunction = 
+ReportFormat = TXT
+ReportFile = pet_report.txt</pre>
+</p>
+<p>看起来还是很高级的吧。report中的一些功能还没搞定，不过应该不难了。</p>
+<p>评测后的输出结果：</p>
+<p>
+<pre class="brush: plain;light: true; fontsize: 100; first-line: 1; ">[Ploblem Info]
+Name:  测试题目 for test
+Info:  测试题目测试测试测试！Hello World
+Time limit: 1.00 s
+Time limit: 800 KB
+
+[Player Info]
+    Player name:  cuihao
+    Source path:  /home/cuihao/pytest/src/pet/cuihao/pet.c
+    TEST #0: A  (time: 0.01 sec    mem: 380 KB) 
+    TEST #1: Timeout 
+    TEST #2: Timeout 
+    TEST #3: W  (time: 0.01 sec    mem: 376 KB) 
+Score: 25
+
+[Player Info]
+    Player name:  blank
+    Source path:  /home/cuihao/pytest/src/pet/blank/pet.py
+    TEST #0: Memory exceeds 
+    TEST #1: Timeout 
+    TEST #2: Memory exceeds 
+    TEST #3: Memory exceeds 
+Score: 0
+
+[Player Info]
+    Player name:  testrt
+    Source path:  /home/cuihao/pytest/src/pet/testrt/pet.cx
+    TEST #0: W  (time: 0.01 sec    mem: 160 KB) 
+    TEST #1: A  (time: 0.00 sec    mem: 0 KB) 
+    TEST #2: A  (time: 0.01 sec    mem: 88 KB) 
+    TEST #3: stdin IOError 
+Score: 50</pre>
+</p>
+<p>为了能往Windows移植，我尽量都用平台无关的python代码。不过有些实在无法解决的，比如内存用量统计问题，还是用了只能在Linux使用的代码。</p>
+<p>&nbsp;</p>
+<p>不久应该就可以搞定了。</p></div>
+	
+	<p class="tags">Tags: <a href="/web/20150625095009/http://cuihaopy.appspot.com/tag/Python">Python</a>&nbsp;&nbsp;</p>
+	
+	<div class="endline"></div>
+	<div class="bookmark">
+	    <ul>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://digg.com/submit?phase=2&amp;url=?p=93002&amp;title=新的Python评测脚本前瞻"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/digg.png" alt="Digg"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://del.icio.us/post?url=?p=93002&amp;title=新的Python评测脚本前瞻"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/delicious.png" alt="Del.icio.us"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://www.stumbleupon.com/submit?url=?p=93002&amp;title=新的Python评测脚本前瞻"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/stumbleupon.png" alt="StumbleUpon"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://reddit.com/submit?url=?p=93002&amp;title=新的Python评测脚本前瞻"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/reddit.png" alt="Reddit"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://twitter.com/home?status=?p=93002"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/twitter.png" alt="Twitter"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://cuihaopy.appspot.com/feed"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/rss.png" alt="RSS"/></a></li>
+        </ul>
+	</div>
+	<div class="read_comments"><a href="/web/20150625095009/http://cuihaopy.appspot.com/?p=93002#comments">Read User's Comments(0)</a></div>
+</div>
+
+<div class="post">
+	<h2><a href="/web/20150625095009/http://cuihaopy.appspot.com/?p=102001" title="Permanent Link to 小糖果： 在 GAE 上运行 Python 程序">小糖果： 在 GAE 上运行 Python 程序</a></h2>
+	<div class="postmetadata">Posted in  <a href="/web/20150625095009/http://cuihaopy.appspot.com/category/programming">Programming</a> </div>
+	<div class="post_date">01/31/11</div>
+	<div class="entry"><p>Here： <a href="/web/20150625095009/http://cuihaopy.appspot.com/runpyatgae">Run .py at GAE</a></p>
+<p>用exec运行输入的Python程序，输入脚本代码点执行即可。</p>
+<p>函数、全局变量什么的都需要global修饰一下才能使用。没有关闭调试信息，所以出错了可以看看怎么回事。GAE限制了些python标准模块，不是所有的函数都可用。</p>
+<p>&nbsp;</p>
+<p>下面是一个关于<a href="https://web.archive.org/web/20150625095009/http://zh.wikipedia.org/zh-cn/%E8%80%83%E6%8B%89%E5%85%B9%E7%8C%9C%E6%83%B3">collatz问题</a>的小脚本，</p>
+<pre class="brush: python;fontsize: 100; first-line: 1; ">global collatz
+
+def collatz(n):
+    print n
+    if n&gt;1:
+        if n%2==0:
+            collatz(3*n + 1)
+        else:
+            collatz(n / 2)
+
+    collatz(100)</pre></div>
+	
+	<p class="tags">Tags: <a href="/web/20150625095009/http://cuihaopy.appspot.com/tag/Python">Python</a>&nbsp;&nbsp;<a href="/web/20150625095009/http://cuihaopy.appspot.com/tag/GAE">GAE</a>&nbsp;&nbsp;</p>
+	
+	<div class="endline"></div>
+	<div class="bookmark">
+	    <ul>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://digg.com/submit?phase=2&amp;url=?p=102001&amp;title=小糖果： 在 GAE 上运行 Python 程序"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/digg.png" alt="Digg"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://del.icio.us/post?url=?p=102001&amp;title=小糖果： 在 GAE 上运行 Python 程序"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/delicious.png" alt="Del.icio.us"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://www.stumbleupon.com/submit?url=?p=102001&amp;title=小糖果： 在 GAE 上运行 Python 程序"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/stumbleupon.png" alt="StumbleUpon"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://reddit.com/submit?url=?p=102001&amp;title=小糖果： 在 GAE 上运行 Python 程序"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/reddit.png" alt="Reddit"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://twitter.com/home?status=?p=102001"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/twitter.png" alt="Twitter"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://cuihaopy.appspot.com/feed"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/rss.png" alt="RSS"/></a></li>
+        </ul>
+	</div>
+	<div class="read_comments"><a href="/web/20150625095009/http://cuihaopy.appspot.com/?p=102001#comments">Read User's Comments(0)</a></div>
+</div>
+
+<div class="post">
+	<h2><a href="/web/20150625095009/http://cuihaopy.appspot.com/?p=101001" title="Permanent Link to Python让编程更美好">Python让编程更美好</a></h2>
+	<div class="postmetadata">Posted in  <a href="/web/20150625095009/http://cuihaopy.appspot.com/category/programming">Programming</a> </div>
+	<div class="post_date">01/28/11</div>
+	<div class="entry"><p>学了十几天的Python，越来越喜欢它了。</p>
+<p>&nbsp;</p>
+<p>学Python的初衷，一个是为了GAE，一个是想多掌握一种流行的语言。作为OIer和很早学过C语言的人，不得不承认，我很追求程序的运行速度，甚至不惜以稳定性、易用性为代价。一开始觉得，Python这种低效率的解释型语言实在不怎么对我胃口。不过Python确实一点点改变了我的思想。</p>
+<p>&nbsp;</p>
+<p>Python给我的第一印象是简单，语法简洁，缩进也是一大特色，没有类型声明（但又不像BASIC简单到白痴，Python依然有严格的类型检查）。</p>
+<p>&nbsp;</p>
+<p>Python的语法，我利用期末考试那三天的中午（^_^），就在机房基本学会了。诸如类、继承、异常一大堆学C++怎么也记不住的概念，也基本理解了（当然，C++的这些机制确实更复杂）。我也不得不声讨一下《C++ Primer Plus》，废话太多了，我学Python时看的《A byte of Python》非常简单明了。</p>
+<p>&nbsp;</p>
+<p>虽然简单，Python也很强大。Python自带的标准库几乎能满足程序员的各种需要，从文本文件到XML处理，从子进程控制到多线程，Python为我们提供了各种库。就算是标准库中没有的，网上也可以找到很多（可能是作为脚本语言，开源不可避免 ^o^）。代码重用为编程提供了极大的便利。</p>
+<p>&nbsp;</p>
+<p>因为这些库，我接触到除了语言本身外更多的东西。学Pascal、C/C++时，总觉得像处理XML、socket、多线程之类的东西搞起来很复杂，所以一直无从入手。但Python的库直接把这些困难的东西简化了，我仅仅用理解多线程的原理，却不用纠结于实现。嘿嘿，谁喜欢自己写又长又长的代码？</p>
+<p>&nbsp;</p>
+<p>Python作为解释语言，性能虽然差了点，不过方便性足够让人高兴了。而且，没有了性能的羁绊，写程序倒是更注重user-friendly了。</p>
+<p>&nbsp;</p>
+<p>因为Windows没有预装Python解释器，Python脚本在Windows上不怎么好使。不过，像Windows这样让人憋屈的玩意儿，谁又在乎呢。</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p></div>
+	
+	<p class="tags">Tags: <a href="/web/20150625095009/http://cuihaopy.appspot.com/tag/Python">Python</a>&nbsp;&nbsp;</p>
+	
+	<div class="endline"></div>
+	<div class="bookmark">
+	    <ul>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://digg.com/submit?phase=2&amp;url=?p=101001&amp;title=Python让编程更美好"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/digg.png" alt="Digg"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://del.icio.us/post?url=?p=101001&amp;title=Python让编程更美好"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/delicious.png" alt="Del.icio.us"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://www.stumbleupon.com/submit?url=?p=101001&amp;title=Python让编程更美好"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/stumbleupon.png" alt="StumbleUpon"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://reddit.com/submit?url=?p=101001&amp;title=Python让编程更美好"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/reddit.png" alt="Reddit"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://twitter.com/home?status=?p=101001"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/twitter.png" alt="Twitter"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://cuihaopy.appspot.com/feed"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/rss.png" alt="RSS"/></a></li>
+        </ul>
+	</div>
+	<div class="read_comments"><a href="/web/20150625095009/http://cuihaopy.appspot.com/?p=101001#comments">Read User's Comments(0)</a></div>
+</div>
+
+<div class="post">
+	<h2><a href="/web/20150625095009/http://cuihaopy.appspot.com/?p=100001" title="Permanent Link to python评测器，初步实现">python评测器，初步实现</a></h2>
+	<div class="postmetadata">Posted in  <a href="/web/20150625095009/http://cuihaopy.appspot.com/category/programming">Programming</a> </div>
+	<div class="post_date">01/28/11</div>
+	<div class="entry"><p>看到TB神牛写了个sh评测脚本，我就也写了一个python评测脚本。</p>
+<p>通过这个脚本学了不少python知识，比如子进程控制、文件比对、异常处理。</p>
+<p>这还只是个简单的实现，不能卡时、卡内存。不过我对卡时已经有想法了，不久就会写出来。</p>
+<p>&nbsp;</p>
+<p>使用方法：</p>
+<p>judge.py 评测数据目录 程序源码或程序</p>
+<p>eg: judge.py ~/media/pet/ ~/src/pet.cpp</p>
+<p>程序必须采用屏幕输入输出。</p>
+<p>输入数据文件扩展名.in，输出扩展名.out或.ans。根据文件名，相同文件名的一组作为同一组数据。文件比对忽略空行。</p>
+<p>&nbsp;</p>
+<p>支持的源代码（按扩展名判定）：</p>
+<p>C/C++ (c,cpp,cxx)，Pascal (pas)，Python (py)，Ruby (rb)，Shell脚本(sh)，普通可执行文件(exe)</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<pre class="brush: python;collapse: true; fontsize: 100; first-line: 1; ">#!/usr/bin/python2
+# -*- coding: utf-8 -*-
+
+def PrintError(s, flexit=0 ):
+	print '  (!!)',s
+	if flexit:
+		print '  (!!) 发生严重错误，评测中止'
+		exit(1)
+
+
+def gocompile (s):
+	""" 编译源代码    s:源代码文件"""
+	import subprocess
+	sourceext={
+		".c"	:	["gcc", "-o", "/tmp/temp.exe", "-O3"],
+		".cpp"	:	["g++", "-o", "/tmp/temp.exe", "-O3"],
+		".cxx"	:	["g++", "-o", "/tmp/temp.exe", "-O3"],
+		".pas"	:	["fpc", "-o", "/tmp/temp.exe", "-O3"]
+	}
+	compilecmd = sourceext.get(os.path.splitext(s)[1])
+	if compilecmd!=None:
+		compilecmd.append(s)
+		try:
+			proc = subprocess.Popen(compilecmd, stdin = subprocess.PIPE, \
+						stdout = subprocess.PIPE, stderr = subprocess.PIPE, \
+						shell = False) 
+		except OSError:
+			PrintError(compilecmd[0]+" 编译器未找到", 1)
+		
+		ret = proc.wait()
+		if ret==0:
+			return "/tmp/temp.exe"
+		else:
+			PrintError("编译错误，请检查源代码", 1)
+	else:
+		return s
+
+
+def gorun (s, fin):
+	""" 运行程序    s:可执行文件 fin:输入文件"""
+	exeext={
+		".exe"	:	[],
+		".sh"	:	["sh"],
+		".py"	:	["python2"],
+		".rb"	:	["ruby"]
+	}
+	import subprocess
+	execmd = exeext.get(os.path.splitext(s)[1])
+	if execmd!=None:
+		execmd.append(s)
+		try:
+			proc = subprocess.Popen(execmd, stdin = subprocess.PIPE, \
+					stdout = subprocess.PIPE, stderr = subprocess.PIPE, \
+					shell = False) 
+		except OSError:
+			PrintError("未发现可执行文件", 1)
+
+		try:
+			proc.stdin.write(file(fin, "r").read())
+		except IOError:
+			PrintError("运行时错误: IOError")
+
+		ret = proc.wait()
+		if ret != 0:
+			PrintError("运行时错误 %d" % ret)
+
+		return proc.stdout
+	else:
+		PrintError("未发现可执行文件", 1)
+
+
+def checkanswer(srcfile, basefile):
+	""" 检查答案    srcfile:比较的文件 fin:基准文件"""
+	import difflib
+	s = difflib.SequenceMatcher( None , 
+			filter(lambda x: not x in " \n\t", srcfile.read().split("\n")),
+			filter(lambda x: not x in " \n\t", basefile.read().split("\n"))) 
+	for tag, i1, i2, j1, j2 in s.get_opcodes():
+		if tag!='equal':
+			PrintError("输出对比不同") 
+			print (tag, i1, i2, j1, j2)
+			return 1
+	return 0
+
+
+def getfinout(s):
+	""" 获取输入输出文件列表    s:搜索目录"""
+	import glob
+	finlist = glob.glob( s + os.sep + '*.in')
+	flist = []
+	for fin in finlist:
+		basename = os.path.splitext(fin)[0]
+		if os.path.isfile( basename + '.out'):
+			flist.append((fin, os.path.splitext(fin)[0] + '.out'))
+		elif os.path.isfile( basename + '.ans'):
+			flist.append((fin, os.path.splitext(fin)[0] + '.ans'))
+	return flist
+
+
+if __name__ == '__main__':
+	import sys, os
+
+	if len(sys.argv)&lt;3 or \
+		(not os.path.isdir(sys.argv[1]) or not os.path.isfile(sys.argv[2])):
+		PrintError("参数格式错误", 1)
+
+	exefile = gocompile(sys.argv[2])
+	count = 0
+	score = 0
+	for fin, fout in getfinout(sys.argv[1]):
+		print "\n输入: %s\n输出: %s" % (fin, fout)
+		print "  运行程序..."
+		count+=1
+		if checkanswer(gorun(exefile, fin), open(fout, "r")) == 0:
+			print "  &lt; 正确 &gt;"
+			score+=1
+		else:
+			print "  &lt; 错误 &gt;"
+
+	print "\n\n评测结束!"
+	if count&gt;0:
+		print "得分: %d (%d/%d)" % \
+				(int(float(score)/float(count)*100), score, count)</pre>
+<p>&nbsp;</p></div>
+	
+	<p class="tags">Tags: <a href="/web/20150625095009/http://cuihaopy.appspot.com/tag/Python">Python</a>&nbsp;&nbsp;</p>
+	
+	<div class="endline"></div>
+	<div class="bookmark">
+	    <ul>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://digg.com/submit?phase=2&amp;url=?p=100001&amp;title=python评测器，初步实现"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/digg.png" alt="Digg"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://del.icio.us/post?url=?p=100001&amp;title=python评测器，初步实现"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/delicious.png" alt="Del.icio.us"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://www.stumbleupon.com/submit?url=?p=100001&amp;title=python评测器，初步实现"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/stumbleupon.png" alt="StumbleUpon"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://reddit.com/submit?url=?p=100001&amp;title=python评测器，初步实现"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/reddit.png" alt="Reddit"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://twitter.com/home?status=?p=100001"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/twitter.png" alt="Twitter"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://cuihaopy.appspot.com/feed"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/rss.png" alt="RSS"/></a></li>
+        </ul>
+	</div>
+	<div class="read_comments"><a href="/web/20150625095009/http://cuihaopy.appspot.com/?p=100001#comments">Read User's Comments(0)</a></div>
+</div>
+
+<div class="post">
+	<h2><a href="/web/20150625095009/http://cuihaopy.appspot.com/?p=99001" title="Permanent Link to 一个Python计算器代码">一个Python计算器代码</a></h2>
+	<div class="postmetadata">Posted in  <a href="/web/20150625095009/http://cuihaopy.appspot.com/category/programming">Programming</a> </div>
+	<div class="post_date">01/20/11</div>
+	<div class="entry"><p>
+<pre class="brush: python;fontsize: 100; first-line: 1; ">#!/usr/bin/python2
+# -*- coding: utf-8 -*-
+
+from cmath import *
+s = raw_input("请输入一个表达式：")
+print eval(s)</pre>
+=。= 读完A byte of Python，写了这个计算器，很小很强大。</p>
+<p>输入sqrt(-2)试试，我的Pascalc可以喝西北风了。</p></div>
+	
+	<p class="tags">Tags: <a href="/web/20150625095009/http://cuihaopy.appspot.com/tag/Python">Python</a>&nbsp;&nbsp;</p>
+	
+	<div class="endline"></div>
+	<div class="bookmark">
+	    <ul>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://digg.com/submit?phase=2&amp;url=?p=99001&amp;title=一个Python计算器代码"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/digg.png" alt="Digg"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://del.icio.us/post?url=?p=99001&amp;title=一个Python计算器代码"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/delicious.png" alt="Del.icio.us"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://www.stumbleupon.com/submit?url=?p=99001&amp;title=一个Python计算器代码"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/stumbleupon.png" alt="StumbleUpon"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://reddit.com/submit?url=?p=99001&amp;title=一个Python计算器代码"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/reddit.png" alt="Reddit"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://twitter.com/home?status=?p=99001"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/twitter.png" alt="Twitter"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://cuihaopy.appspot.com/feed"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/rss.png" alt="RSS"/></a></li>
+        </ul>
+	</div>
+	<div class="read_comments"><a href="/web/20150625095009/http://cuihaopy.appspot.com/?p=99001#comments">Read User's Comments(0)</a></div>
+</div>
+
+<div class="post">
+	<h2><a href="/web/20150625095009/http://cuihaopy.appspot.com/?p=96001" title="Permanent Link to 代码高亮插件">代码高亮插件</a></h2>
+	<div class="postmetadata">Posted in  <a href="/web/20150625095009/http://cuihaopy.appspot.com/category/programming">Programming</a> </div>
+	<div class="post_date">01/16/11</div>
+	<div class="entry"><p><strong>Micolog附带的代码高亮plugin，支持的语言还不少，展示一下：</strong></p>
+<p>Bash:</p>
+<pre class="brush: bash;fontsize: 100; first-line: 1; ">#!/bin/bash
+OPTIONS="Hello Quit"
+select opt in $OPTIONS; do
+    if [ "$opt" = "Quit" ]; then
+        echo done
+        exit
+    elif [ "$opt" = "Hello" ]; then
+        echo Hello World
+    else
+        clear
+        echo bad option
+    fi
+done</pre>
+<p>C/C++:</p>
+<pre class="brush: cpp;fontsize: 100; first-line: 1; ">#include &lt;stdio.h&gt;
+
+int main(void)
+{
+    printf("Hello\n");
+
+    return 0;
+}</pre>
+<p>Pascal:</p>
+<pre class="brush: pascal;fontsize: 100; first-line: 1; ">program jsq;
+var a,b,m:real; ch:char;
+begin
+ readln(a);
+ readln(ch,b);
+ case ch of
+  '+':m:=a+b;
+  '-':m:=a-b;
+  '*':m:=a*b;
+  '/':m:=a/b;
+  '^':m:=exp(b*ln(a));
+ end;
+ writeln(m:0:10);
+ readln;
+end.</pre>
+<p>VB：</p>
+<pre class="brush: vb;fontsize: 100; first-line: 1; ">Public Class StarsProgram
+    Public Shared Sub Main()
+        Dim UserName, Answer, stars As String, NumStars As Integer
+        Console.Write("What is your name: ")
+        UserName = Console.ReadLine()
+        Console.WriteLine("Hello {0}", UserName)
+        Do
+            Console.Write("How many stars do you want: ")
+            NumStars = CInt(Console.ReadLine())
+            stars = New String("*", NumStars)
+            Console.WriteLine(stars)
+            Do
+                Console.Write("Do you want more stars? ")
+                Answer = Console.ReadLine()
+            Loop Until Answer &lt;&gt; ""
+            Answer = Answer.Substring(0, 1)
+        Loop While Answer.ToUpper() = "Y"
+        Console.WriteLine("Goodbye {0}", UserName)
+    End Sub
+End Class</pre>
+<p>Python：</p>
+<pre class="brush: python;fontsize: 100; first-line: 1; ">class Fish:
+    def eat(self, food):
+        if food is not None:
+            self.hungry=False</pre>
+<p>&nbsp;</p></div>
+	
+	<div class="endline"></div>
+	<div class="bookmark">
+	    <ul>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://digg.com/submit?phase=2&amp;url=?p=96001&amp;title=代码高亮插件"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/digg.png" alt="Digg"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://del.icio.us/post?url=?p=96001&amp;title=代码高亮插件"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/delicious.png" alt="Del.icio.us"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://www.stumbleupon.com/submit?url=?p=96001&amp;title=代码高亮插件"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/stumbleupon.png" alt="StumbleUpon"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://reddit.com/submit?url=?p=96001&amp;title=代码高亮插件"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/reddit.png" alt="Reddit"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://twitter.com/home?status=?p=96001"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/twitter.png" alt="Twitter"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://cuihaopy.appspot.com/feed"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/rss.png" alt="RSS"/></a></li>
+        </ul>
+	</div>
+	<div class="read_comments"><a href="/web/20150625095009/http://cuihaopy.appspot.com/?p=96001#comments">Read User's Comments(0)</a></div>
+</div>
+
+<div class="post">
+	<h2><a href="/web/20150625095009/http://cuihaopy.appspot.com/?p=63002" title="Permanent Link to NOIP 2010 简报">NOIP 2010 简报</a></h2>
+	<div class="postmetadata">Posted in  <a href="/web/20150625095009/http://cuihaopy.appspot.com/category/programming">Programming</a> </div>
+	<div class="post_date">11/20/10</div>
+	<div class="entry"><p>今日NOIP2010复赛。</p>
+<p>&nbsp;</p>
+<p>第一题，translate：水题，开一个队列按规则模拟，100分。</p>
+<p>&nbsp;</p>
+<p>第二题，tortoise：四维动规（其实是五维缩的），时间上没问题，空间上要保守点，不注意可能超内存，100分。</p>
+<p>&nbsp;</p>
+<p>第三题，prison：我用的方法是贪心+并查集判环（就像kruskal算法似的），并查集是每次O(n)的，有超时的可能（删掉的边很多时），不过数据比想象的弱，100分。</p>
+<p>&nbsp;</p>
+<p>第四题，flow：不知道怎么做，先用floodfill找出河边的点与沙漠上的点的连接关系，然后深搜。30分，估计过了前三组不能完全供水的数据，后面的都没过猜测是剪枝fail了。</p>
+<p>&nbsp;</p>
+<p>-v- 反正肯定过线了。</p>
+<p>&nbsp;</p></div>
+	
+	<p class="tags">Tags: <a href="/web/20150625095009/http://cuihaopy.appspot.com/tag/NOIP">NOIP</a>&nbsp;&nbsp;<a href="/web/20150625095009/http://cuihaopy.appspot.com/tag/%E8%81%94%E8%B5%9B">联赛</a>&nbsp;&nbsp;</p>
+	
+	<div class="endline"></div>
+	<div class="bookmark">
+	    <ul>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://digg.com/submit?phase=2&amp;url=?p=63002&amp;title=NOIP 2010 简报"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/digg.png" alt="Digg"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://del.icio.us/post?url=?p=63002&amp;title=NOIP 2010 简报"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/delicious.png" alt="Del.icio.us"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://www.stumbleupon.com/submit?url=?p=63002&amp;title=NOIP 2010 简报"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/stumbleupon.png" alt="StumbleUpon"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://reddit.com/submit?url=?p=63002&amp;title=NOIP 2010 简报"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/reddit.png" alt="Reddit"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://twitter.com/home?status=?p=63002"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/twitter.png" alt="Twitter"/></a></li>
+	        <li><a href="https://web.archive.org/web/20150625095009/http://cuihaopy.appspot.com/feed"><img class="bookmark_icon" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/bookmark/rss.png" alt="RSS"/></a></li>
+        </ul>
+	</div>
+	<div class="read_comments"><a href="/web/20150625095009/http://cuihaopy.appspot.com/?p=63002#comments">Read User's Comments(0)</a></div>
+</div>
+
+<div class="wp-pagenavi">
+    
+    
+</div>
+
+</div>
+<!-- content end -->
+﻿<!-- sidebar start -->
+<div id="sidebar">
+	<div id="sidebar_top">
+		<ul>
+		    <li>
+			    <h3>Categories</h3>
+			    <ul>
+				    
+                    <li><a href="/web/20150625095009/http://cuihaopy.appspot.com/category/oldlivespace">旧Live空间文章(55)</a></li>
+                    
+                    <li><a href="/web/20150625095009/http://cuihaopy.appspot.com/category/linux">Linux(2)</a></li>
+                    
+                    <li><a href="/web/20150625095009/http://cuihaopy.appspot.com/category/programming">Programming(17)</a></li>
+                    
+			    </ul>
+		    </li>
+		    <li>
+		        <h3>Links</h3>
+			    <ul>
+				    
+                    <li><a href="https://web.archive.org/web/20150625095009/http://xuming.net/" target="_blank">Micolog开发者徐明的博客</a></li>
+                    
+                    <li><a href="https://web.archive.org/web/20150625095009/mailto:cuihao.leo@gmail.com" target="_blank">Mail我</a></li>
+                    
+                    <li><a href="https://web.archive.org/web/20150625095009/http://www.equn.com/" target="_blank">中国分布式计算总站</a></li>
+                    
+			    </ul>
+		    </li>
+		    <li>
+			    <h3>Meta</h3>
+			    <ul>
+				    
+				    
+                        <li><a href="/web/20150625095009/http://cuihaopy.appspot.com/admin">Login</a></li>
+                    
+				    <li><a href="https://web.archive.org/web/20150625095009/http://validator.w3.org/check/referer">Valid <abbr title="eXtensible HyperText Markup Language">XHTML</abbr></a></li>
+				    <li><a href="https://web.archive.org/web/20150625095009/http://gmpg.org/xfn/"><abbr title="XHTML Friends Network">XFN</abbr></a></li>
+				    
+			    </ul>
+		    </li>
+		</ul>
+		<div class="sidebar_paper_bottom"></div>
+	</div>
+	<div id="searchform">
+		<form method="get" action="https://web.archive.org/web/20150625095009/http://www.google.com/search">
+			<input type="text" class="searchtext" name="as_q" id="s"/>
+			<input type="image" src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/spacer.gif" id="searchsubmit" alt="Search" value=""/>
+		</form>
+	</div>
+	<div id="sidebar_bottom">
+		<ul>
+		    <li>
+			    <h3><img src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/sidebar_posts.jpg" width="189" height="35" alt="Recent Posts"/></h3>
+			    <ul>
+				    
+                    <li><a href="/web/20150625095009/http://cuihaopy.appspot.com/?p=117001">[NOIP2006] [动态规划] 金明的预算方案（提高组）</a></li>
+                    
+                    <li><a href="/web/20150625095009/http://cuihaopy.appspot.com/?p=116001">牛顿法解方程</a></li>
+                    
+                    <li><a href="/web/20150625095009/http://cuihaopy.appspot.com/?p=115001">死亡人数最多的十大自然灾害</a></li>
+                    
+                    <li><a href="/web/20150625095009/http://cuihaopy.appspot.com/?p=114001">[最大流, Edmonds–Karp算法] shuttle 太空飞行计划</a></li>
+                    
+                    <li><a href="/web/20150625095009/http://cuihaopy.appspot.com/?p=113001">[二分图匹配, 匈牙利算法] pilot 飞行员配对</a></li>
+                    
+                    <li><a href="/web/20150625095009/http://cuihaopy.appspot.com/?p=111001">[NOI2003] [Splay(伸展树)] EDITOR2003 文本编辑器</a></li>
+                    
+                    <li><a href="/web/20150625095009/http://cuihaopy.appspot.com/?p=110001">[二项堆, 并查集] Monkey King 猴子选大王</a></li>
+                    
+                    <li><a href="/web/20150625095009/http://cuihaopy.appspot.com/?p=109001">归并排序，也是很快的！</a></li>
+                    
+			    </ul>
+		    </li>
+		    <li>
+			    <h3><img src="/web/20150625095009im_/http://cuihaopy.appspot.com/themes/vector-flower/images/sidebar_comments.jpg" width="189" height="35" alt="Recent Comments"/></h3>
+			    <ul>
+				    
+                    <li><a href="/web/20150625095009/http://cuihaopy.appspot.com/2009/08/29/man-BOINC-cient.html#comment-78001">Hao Li:百度上第一个搜到的就是你这篇，正需要，非...</a></li>
+                    
+                    <li><a href="/web/20150625095009/http://cuihaopy.appspot.com/2010/01/1/Nov-and-Dec.html#comment-12004">Carol Zhang:刘翔回福建了？为什么？什么时候？李真晓同...</a></li>
+                    
+                    <li><a href="/web/20150625095009/http://cuihaopy.appspot.com/2009/10/2/10.1-holiday.html#comment-52002">勃:ha....</a></li>
+                    
+                    <li><a href="/web/20150625095009/http://cuihaopy.appspot.com/2009/09/6/Because-A(H1N1),-we-free.html#comment-83001">勃:……………………………………………………...</a></li>
+                    
+                    <li><a href="/web/20150625095009/http://cuihaopy.appspot.com/2009/09/6/Because-A(H1N1),-we-free.html#comment-84001">Hao:Chiglish懂不懂 中国人咋当的。。...</a></li>
+                    
+			    </ul>
+		    </li>
+		</ul>
+	</div>
+	<div class="fix_bottom"></div>
+</div>
+<!-- sidebar end -->
+<div class="endline"></div>
+
+</div>
+<!-- container end -->
+
+<!-- footer start -->
+<div id="footer">
+
+	<div class="credit">
+		Copyright &copy; 2011 <a href="https://web.archive.org/web/20150625095009/http://cuihaopy.appspot.com/">DoraDaemon</a>. All rights reserved.<br/>
+		Presented by <a href="https://web.archive.org/web/20150625095009/http://www.luggageguides.com/">Luggage</a> <a href="https://web.archive.org/web/20150625095009/http://www.miamihotelsadvisor.com/">Miami Hotels</a>, Coded: EZwpthemes.<br/>
+    		Powered by <a href="https://web.archive.org/web/20150625095009/http://code.google.com/appengine/">Google App Engine</a><br/>
+		由 <a href="https://web.archive.org/web/20150625095009/http://xuming.net/">xuming</a> 提供 <a href="https://web.archive.org/web/20150625095009/http://code.google.com/p/micolog">Micolog</a>程序
+	</div>
+
+<script type="text/javascript">
+if ($('pre[class^=brush:]').length > 0)
+{
+	$.getScript("/syntaxhighlighter/scripts/shCore.js", function() {
+		SyntaxHighlighter.boot("/syntaxhighlighter/", {theme : "Default", stripBrs : true}, {});
+	});
+}
+</script>
+<!--Powered by micolog 0.74-->
+</div>
+<!-- footer end -->
+<div class="endline"></div>
+</div>
+<!-- warpper end -->
+</body>
+</html>
+<!--
+     FILE ARCHIVED ON 09:50:09 Jun 25, 2015 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 12:18:27 Apr 06, 2018.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+-->
+<!--
+playback timings (ms):
+  LoadShardBlock: 42.153 (3)
+  esindex: 0.012
+  captures_list: 75.648
+  CDXLines.iter: 13.656 (3)
+  PetaboxLoader3.datanode: 42.337 (4)
+  exclusion.robots: 0.316
+  exclusion.robots.policy: 0.27
+  RedisCDXSource: 14.807
+  PetaboxLoader3.resolve: 123.682
+  load_resource: 137.015
+-->

@@ -1,0 +1,22 @@
+# Welcome to Jekyll!
+#
+# This config file is meant for settings that affect your whole blog, values
+# which you are expected to set up once and rarely need to edit after that.
+# For technical reasons, this file is *NOT* reloaded automatically when you use
+# 'jekyll serve'. If you change this file, please restart the server process.
+
+# Site settings
+title: DoraDaemon (rebuild)
+email: cuihao.leo@gmail.com
+description: > # this means to ignore newlines until "baseurl:"
+  cuihao 于2010~2011年短暂使用的博客，原本放在 Google App Engine 上，后来由于缺乏维护而丢失。这是从 Internet Archive 恢复的页面。
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "https://cuihaoleo.github.io/cuihaopy-backup" # the base hostname & protocol for your site
+twitter_username: cuihaoleo
+github_username:  cuihaoleo
+
+# Build settings
+markdown: kramdown
+
+kramdown:
+    input: GFM
